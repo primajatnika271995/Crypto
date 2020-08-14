@@ -1,6 +1,10 @@
 # iOSCrypto
-This is an iOS crypto library.
-## Implement a symmetric cipher
+This is a iOS crypto library. It supports following functions:
+- [x] Symmetry Cipher
+- [ ] Asymmetry Cipher
+- [ ] Hashing function
+## Symmetry Cipher
+### Implement a Symmetric Cipher
 
 ```swift
 let alghrithm: SymmetryCipher.Algorithm = .aes
@@ -16,7 +20,7 @@ let encrypted = try cipher.process(.encrypt, data: data)
 let decrypted = try cipher.process(.decrypt, data: encrypted)
 ```
 
-## Supported symmetric algorithms
+### Supported Symmetric algorithms
 * AES
 * DES
 * Tripple DES
@@ -24,3 +28,13 @@ let decrypted = try cipher.process(.decrypt, data: encrypted)
 * RC4
 * RC2
 * Blowfish
+
+### Supported modes
+
+* ECB
+* CBC
+* CFB
+* CTR
+* OFB
+* RC4
+* CFB8
