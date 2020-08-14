@@ -66,3 +66,5 @@ print(SymmetryCipher.Mode.cbc.needesIV())
 print(SymmetryCipher.Mode.ecb.needesIV())
 // prints false
 ```
+## Integration
+Choose **File**->**Swift Packages**->**Add Pakcage dependancies**, and add https://github.com/LoniQin/iOSCrypto/edit/master to it.
