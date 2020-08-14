@@ -12,24 +12,52 @@ import CommonCrypto
 
 class CryptoTests: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    func testInBruteForce() throws {
+        var texts = ["🐱🐱🐱", "Hello world", ""]
+        do {
+            for text in texts {
+                for algorithm in SymmetryCipher.Algorithm.allCases {
+                    for mode in SymmetryCipher.Mode.allCases {
+                        for padding in SymmetryCipher.Padding.allCases {
+                            let key = try algorithm.generateRandomKey()
+                            let iv = mode.needesIV() ? try algorithm.generateRandomIV() : Data()
+                            let cipher = try SymmetryCipher(algorithm: algorithm, key: key, iv: iv, padding: padding, mode: mode)
+                            if algorithm.isValid(mode: mode, padding: padding) {
+                                let data = text.data(using: .utf8)!
+                                let encrypted = try cipher.process(.encrypt, data: data)
+                                let decrypted = try cipher.process(.decrypt, data: encrypted)
+                                XCTAssert(data == decrypted)
+                            }
+                        }
+                    }
+                }
+            }
+        } catch let error {
+            objc_exception_throw(error)
         }
     }
-
+    
+    func testRandomly() throws {
+        do {
+            for algorithm in SymmetryCipher.Algorithm.allCases {
+                for mode in SymmetryCipher.Mode.allCases {
+                    for padding in SymmetryCipher.Padding.allCases {
+                       
+                        let key = try algorithm.generateRandomKey()
+                        let iv = mode.needesIV() ? algorithm.generateRandomIV() : Data()
+                        let cipher = try SymmetryCipher(algorithm: algorithm, key: key, iv: iv, padding: padding, mode: mode)
+                        if algorithm.isValid(mode: mode, padding: padding) {
+                            let data = Data(random: Int(arc4random()) % 1000)
+                            let encrypted = try cipher.process(.encrypt, data: data)
+                            let decrypted = try cipher.process(.decrypt, data: encrypted)
+                            XCTAssert(data == decrypted)
+                        }
+                    }
+                }
+            }
+        } catch let error {
+            objc_exception_throw(error)
+        }
+    }
+    
 }

@@ -7,7 +7,11 @@
 //
 import CommonCrypto
 import Foundation
-public enum CryptoError: CCCryptorStatus, Error {
+public enum CryptoError: Error {
+    case invalidIV
+    case invalidCipher(SymmetryCipher)
+}
+public enum CCError: CCCryptorStatus, Error {
     case paramError         = -4300
     case bufferTooSmall     = -4301
     case memoryFailure      = -4302
