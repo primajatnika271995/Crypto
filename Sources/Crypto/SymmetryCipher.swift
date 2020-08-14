@@ -79,7 +79,7 @@ public struct SymmetryCipher {
     
     public let mode: Mode
     
-    init(algorithm: Algorithm, key: Data, iv: Data = Data(), padding: Padding = .none, mode: Mode = .ecb) throws {
+    init(algorithm: Algorithm, key: Data, iv: Data = Data(), padding: Padding = .pkcs7, mode: Mode = .cbc) throws {
         guard algorithm.isValidKeySize(key.count) else { throw CCError.keySizeError }
         if mode.needesIV() && iv.count != algorithm.blockSize { throw CryptoError.invalidIV }
         self.algorithm = algorithm

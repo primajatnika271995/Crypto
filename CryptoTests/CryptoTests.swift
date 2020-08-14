@@ -60,4 +60,27 @@ class CryptoTests: XCTestCase {
         }
     }
     
+    func testAES() throws {
+        do {
+            let alghrithm: SymmetryCipher.Algorithm = .aes
+            let data = "Hello world".data(using: .utf8)!
+            let key = try alghrithm.generateRandomKey()
+            let iv = alghrithm.generateRandomIV()
+            let cipher = try SymmetryCipher(algorithm: alghrithm, key: key, iv: iv, padding: .pkcs7, mode: .cbc)
+            let encrypted = try cipher.encrypt(data: data)
+            let decrypted = try cipher.decrypt(data: encrypted)
+        } catch let error {
+            print(error)
+        }
+    }
+    
+    func testIsAlgorithmVaild() throws {
+        XCTAssertTrue(SymmetryCipher.Algorithm.aes.isValid(mode: .ctr, padding: .pkcs7))
+    }
+    
+    func testIsIVNeeded() {
+        print(SymmetryCipher.Mode.cbc.needesIV())
+        print(SymmetryCipher.Mode.ecb.needesIV())
+    }
+    
 }
