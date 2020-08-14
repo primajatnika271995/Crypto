@@ -59,3 +59,10 @@ let decrypted = try cipher.decrypt(data: encrypted)
 ```swift
 print(SymmetryCipher.Algorithm.aes.isValid(mode: .ctr, padding: .pkcs7))
 ```
+### Check whether we need IV parameter in certain mode
+```swift
+print(SymmetryCipher.Mode.cbc.needesIV())
+// prints true
+print(SymmetryCipher.Mode.ecb.needesIV())
+// prints false
+```
