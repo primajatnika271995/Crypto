@@ -1,8 +1,8 @@
 # Crypto
-This is a iOS crypto library. It supports following functions:
+This is a iOS crypto library. It’s made to be convenient to use. It supports following functions:
 + Symmetry Cipher
-- Asymmetry Cipher
 + Digest
+When you use Symmetry Cipher, you can iterate all possible algorithms, cipher modes and generate valid random key and iv. You can also check if certain algorithm is valid for certain mode.
 ## Integration
 This is an Swift Package. In Xcode, you may choose **File**->**Swift Packages**->**Add Pakcage dependancies**, and add https://github.com/LoniQin/iOSCrypto.
 ## Symmetry Cipher
@@ -64,9 +64,7 @@ do {
 } catch let error {
     print("Error:\(error)")
 }
-```
-It produces following output:
-```
+/*
 Plain text: Hello world
 -----------------------------------------------------
 Algorithm: AES
@@ -285,6 +283,7 @@ key: 61f1c0d35a420070
 iv: 7630adb075b68a52
 Cipher text: 9de4f17afe83fa720ae781
 -----------------------------------------------------
+*/
 ```
 
 
