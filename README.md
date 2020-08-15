@@ -337,6 +337,7 @@ Cipher text: 9de4f17afe83fa720ae781
 ### Supported paddings
 * NoPadding
 * PKCS7Padding
+
 There are some exceptions: RC4 algorithm only supports RC4 Cipher Mode, other algorithms can’t use RC4 mode. And ECB mode and CBC mode don’t support NoPadding.
 ### Check whether an algorithm supports certain mode and padding
 ```swift
