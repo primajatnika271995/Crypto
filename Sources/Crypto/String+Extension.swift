@@ -7,6 +7,7 @@
 
 import Foundation
 public extension String {
+    
     func data(_ encoding: Crypto.Encoding) throws -> Data {
         var d: Data?
         switch encoding {
@@ -22,4 +23,9 @@ public extension String {
         guard let value = d else { throw CryptoError.codingError }
         return value
     }
+    
+    func digest(_ algorithm: Digest) throws -> String {
+        try algorithm.process(data: try data(.utf8)).string(.hex)
+    }
+    
 }
