@@ -187,20 +187,33 @@ public struct SymmetryCipher {
  
 }
 
-
-extension SymmetryCipher.Algorithm {
+public extension SymmetryCipher.Algorithm {
     
-    public enum KeySizes {
-        public static let aes = [14, 24, 32]
-        public static let des = [8]
-        public static let des3 = [24]
+    struct KeySize {
+        
+        public static let aes128 = 16
+        
+        public static let aes192 = 24
+        
+        public static let aes256 = 32
+        
+        public static let aes = [aes128, aes192, aes256]
+        
+        public static let des = 8
+        
+        public static let des3 = 24
+        
         public static let cast = 5...16
+        
         public static let rc4 = 1...512
+        
         public static let rc2 = 1...128
+        
         public static let blowfish = 8...56
+        
     }
     
-    public var blockSize: Int {
+    var blockSize: Int {
         switch self {
         case .aes:
             return 16
@@ -209,7 +222,7 @@ extension SymmetryCipher.Algorithm {
         }
     }
     
-    public func generateRandomKey(size: Int? = nil) throws -> Data {
+    func generateRandomKey(size: Int? = nil) throws -> Data {
         var actualSize = 0
         if let size = size {
             guard isValidKeySize(size) else { throw CCError.keySizeError }
@@ -225,49 +238,49 @@ extension SymmetryCipher.Algorithm {
         return Data(random: actualSize)
     }
     
-    public func generateRandomIV() -> Data {
+    func generateRandomIV() -> Data {
         return Data(random: blockSize)
     }
     
-    public func keySizes() -> [Int] {
+    func keySizes() -> [Int] {
         switch self {
         case .aes:
-            return KeySizes.aes
+            return KeySize.aes
         case .des:
-            return KeySizes.des
+            return [KeySize.des]
         case .des3:
-            return KeySizes.des3
+            return [KeySize.des3]
         case .cast:
-            return Array(KeySizes.cast)
+            return Array(KeySize.cast)
         case .rc4:
-            return Array(KeySizes.rc4)
+            return Array(KeySize.rc4)
         case .rc2:
-            return Array(KeySizes.rc2)
+            return Array(KeySize.rc2)
         case .blowfish:
-            return Array(KeySizes.blowfish)
+            return Array(KeySize.blowfish)
         }
     }
 
-    public func isValidKeySize(_ size: Int) -> Bool {
+    func isValidKeySize(_ size: Int) -> Bool {
         switch self {
         case .aes:
-            return KeySizes.aes.contains(size)
+            return KeySize.aes.contains(size)
         case .des:
-            return KeySizes.des.contains(size)
+            return KeySize.des == size
         case .des3:
-            return KeySizes.des3.contains(size)
+            return KeySize.des3 == size
         case .cast:
-            return KeySizes.cast.contains(size)
+            return KeySize.cast.contains(size)
         case .rc4:
-            return KeySizes.rc4.contains(size)
+            return KeySize.rc4.contains(size)
         case .rc2:
-            return KeySizes.rc2.contains(size)
+            return KeySize.rc2.contains(size)
         case .blowfish:
-            return KeySizes.blowfish.contains(size)
+            return KeySize.blowfish.contains(size)
         }
     }
     
-    public func isValid(mode: SymmetryCipher.Mode, padding: SymmetryCipher.Padding) -> Bool {
+    func isValid(mode: SymmetryCipher.Mode, padding: SymmetryCipher.Padding) -> Bool {
         switch self {
         case .rc4:
             return mode == .rc4

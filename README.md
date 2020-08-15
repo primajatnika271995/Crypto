@@ -1,10 +1,25 @@
 # Crypto
 This is a iOS crypto library. It’s made to be convenient to use. It supports following functions:
-+ Symmetry Cipher
-+ Digest
-When you use Symmetry Cipher, you can iterate all possible algorithms, cipher modes and generate valid random key and iv. You can also check if certain algorithm is valid for certain mode.
+- [x] Symmetry Cipher
+- [x] Digest
+For Symmetry Cipher, this library can check whether key and iv is valid, whether the algorithm is valid for certain padding and Cipher Mode.  you can iterate all possible algorithms, cipher modes and generate valid random key and iv. You can also check if certain algorithm is valid for certain mode. You can calculate AES256 with following code:
+```swift
+do {
+    let plainText = "Hello world"
+    let data = try plainText.data(.utf8)
+    let key = try String(repeating: "1", count: 32).data(.ascii)
+    let iv = try String(repeating: "1", count: 16).data(.ascii)
+    let aes = try SymmetryCipher(algorithm: .aes, key: key, iv: iv)
+    let encrypted = try aes.encrypt(data: data)
+    print("Cipher text: \(try encrypted.string(.hex))")
+    let decrypted = try aes.decrypt(data: encrypted)
+} catch let error {
+    print(error)
+}
+```
+For Digest, you can calculate `sha1` as simple as using `*try* Digest.sha1.process(data: "hello world".data(.utf8))`. 
 ## Integration
-This is an Swift Package. In Xcode, you may choose **File**->**Swift Packages**->**Add Pakcage dependancies**, and add https://github.com/LoniQin/iOSCrypto.
+This is an Swift Package. In Xcode, you may choose File->Swift Packages->Add Pakcage dependancies, and add https://github.com/LoniQin/iOSCrypto.
 ## Symmetry Cipher
 ### Implement a Symmetric Cipher
 
@@ -21,7 +36,7 @@ let encrypted = try cipher.process(.encrypt, data: data)
 // Decrypt data
 let decrypted = try cipher.process(.decrypt, data: encrypted)
 ```
-You can also speciafy **padding** and **mode**, use `encrypt` and `decrypt` method:
+You can also speciafy padding and mode, use `encrypt` and `decrypt` method:
 ```swift
 let alghrithm: SymmetryCipher.Algorithm = .aes
 let data = "Hello world".data(using: .utf8)!
@@ -309,15 +324,15 @@ Cipher text: 9de4f17afe83fa720ae781
 ### Supported paddings
 * NoPadding
 * PKCS7Padding
-
+There are some exceptions: RC4 algorithm only supports RC4 Cipher Mode, other algorithms can’t use RC4 mode. And ECB mode and CBC mode don’t support NoPadding.
 ### Check whether an algorithm supports certain mode and padding
 ```swift
 print(SymmetryCipher.Algorithm.aes.isValid(mode: .ctr, padding: .pkcs7))
 // prints true
-print(SymmetryCipher.Algorithm.rc4.isValid(mode: .ctr, padding: .pkcs7))
+print(SymmetryCipher.Algorithm.rc4.isValid(mode: .ctr, padding: .none))
 // prints false
 ```
-### Check whether we need IV parameter in certain mode
+### Check whether iv is needed
 ```swift
 print(SymmetryCipher.Mode.cbc.needesIV())
 // prints true
@@ -326,7 +341,25 @@ print(SymmetryCipher.Mode.ecb.needesIV())
 ```
 
 ## Digest
+
 ### How to use
+```swift
+do {
+    let plainText = "Hello world"
+    let data = try plainText.data(.utf8)
+    let digest = try Digest.sha256.process(data: data).string(.hex)
+    print("Plain text: \(plainText)")
+    print("SHA256: \(digest)")
+} catch let error {
+    print(error)
+}
+/*
+Plain text: Hello world
+SHA256: 64ec88ca00b268e5ba1a35678a1b5316d212f4f366b2477232534a8aeca37f3c
+*/
+```
+
+
 ```swift
 let plainText = "hello world"
 print("Plain text: \(plainText)")

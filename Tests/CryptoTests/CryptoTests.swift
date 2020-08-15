@@ -2,6 +2,7 @@ import XCTest
 @testable import Crypto
 
 final class CryptoTests: XCTestCase {
+    
     func testInBruteForce() throws {
         let texts = ["🐱🐱🐱", "Hello world", ""]
         do {
@@ -54,7 +55,6 @@ final class CryptoTests: XCTestCase {
                 }
             }
         } catch let error {
-            print("Error:\(error)")
             objc_exception_throw(error)
         }
         
@@ -82,21 +82,7 @@ final class CryptoTests: XCTestCase {
             objc_exception_throw(error)
         }
     }
-    
-    func testAES() throws {
-        do {
-            let alghrithm: SymmetryCipher.Algorithm = .aes
-            let data = "Hello world".data(using: .utf8)!
-            let key = try alghrithm.generateRandomKey()
-            let iv = alghrithm.generateRandomIV()
-            let cipher = try SymmetryCipher(algorithm: alghrithm, key: key, iv: iv, padding: .pkcs7, mode: .cbc)
-            let encrypted = try cipher.encrypt(data: data)
-            let decrypted = try cipher.decrypt(data: encrypted)
-        } catch let error {
-            print(error)
-        }
-    }
-    
+
     func testIsAlgorithmVaild() throws {
         XCTAssertTrue(SymmetryCipher.Algorithm.aes.isValid(mode: .ctr, padding: .pkcs7))
     }
@@ -115,10 +101,72 @@ final class CryptoTests: XCTestCase {
             XCTAssert(digested.count == digest.length)
         }
     }
+    
+    func testAES128() {
+        do {
+            let algorithm = SymmetryCipher.Algorithm.aes
+            let plainText = "Hello world"
+            let data = try plainText.data(.utf8)
+            let key = try String(repeating: "1", count: SymmetryCipher.Algorithm.KeySize.aes128).data(.ascii)
+            let iv = try String(repeating: "1", count: algorithm.blockSize).data(.ascii)
+            let aes = try SymmetryCipher(algorithm: .aes, key: key, iv: iv)
+            let encrypted = try aes.encrypt(data: data)
+            print("Cipher text: \(try encrypted.string(.hex))")
+            let decrypted = try aes.decrypt(data: encrypted)
+            XCTAssert(data == decrypted)
+        } catch let error {
+            objc_exception_throw(error)
+        }
+    }
+    
+    func testAES192() {
+        do {
+            let algorithm = SymmetryCipher.Algorithm.aes
+            let plainText = "Hello world"
+            let data = try plainText.data(.utf8)
+            let key = try String(repeating: "1", count: SymmetryCipher.Algorithm.KeySize.aes192).data(.ascii)
+            let iv = try String(repeating: "1", count: algorithm.blockSize).data(.ascii)
+            let aes = try SymmetryCipher(algorithm: .aes, key: key, iv: iv)
+            let encrypted = try aes.encrypt(data: data)
+            print("Cipher text: \(try encrypted.string(.hex))")
+            let decrypted = try aes.decrypt(data: encrypted)
+            XCTAssert(data == decrypted)
+        } catch let error {
+            objc_exception_throw(error)
+        }
+    }
+    
+    func testAES256() {
+        do {
+            let plainText = "Hello world"
+            let data = try plainText.data(.utf8)
+            let key = try String(repeating: "1", count: 32).data(.ascii)
+            let iv = try String(repeating: "1", count: 16).data(.ascii)
+            let aes = try SymmetryCipher(algorithm: .aes, key: key, iv: iv)
+            let encrypted = try aes.encrypt(data: data)
+            print("Cipher text: \(try encrypted.string(.hex))")
+            let decrypted = try aes.decrypt(data: encrypted)
+            XCTAssert(data == decrypted)
+        } catch let error {
+            objc_exception_throw(error)
+        }
+    }
+    
+    func testSHA256() {
+        do {
+            let plainText = "Hello world"
+            let data = try plainText.data(.utf8)
+            let digest = try Digest.sha256.process(data: data).string(.hex)
+            print("Plain text: \(plainText)")
+            print("SHA256: \(digest)")
+        } catch let error {
+            objc_exception_throw(error)
+        }
+    }
 
     static var allTests = [
         ("testInBruteForce", testInBruteForce),
         ("testRandomly", testRandomly),
-        ("testAES", testAES)
+        ("testAES", testAES128)
     ]
 }
