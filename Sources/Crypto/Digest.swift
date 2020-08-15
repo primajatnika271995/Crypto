@@ -16,7 +16,7 @@ enum Digest: CaseIterable {
     case sha384
     case sha512
     
-    func length() -> Int {
+    var length: Int {
         switch self {
         case .md2:
             return Int(CC_MD2_DIGEST_LENGTH)
@@ -37,7 +37,7 @@ enum Digest: CaseIterable {
         }
     }
     
-    func function() -> ((_ data: UnsafeRawPointer?, _ len: CC_LONG, _ md: UnsafeMutablePointer<UInt8>?) -> UnsafeMutablePointer<UInt8>?) {
+    var function: ((_ data: UnsafeRawPointer?, _ len: CC_LONG, _ md: UnsafeMutablePointer<UInt8>?) -> UnsafeMutablePointer<UInt8>?) {
         switch self {
         case .md2:
             return CC_MD2
@@ -59,11 +59,10 @@ enum Digest: CaseIterable {
     }
     
     func process(data: Data) -> Data {
-        var result = [UInt8](repeating: 0, count: length())
-        var item = data.withUnsafeBytes {
-            function()($0.baseAddress, UInt32(data.count), &result)
+        var result = [UInt8](repeating: 0, count: length)
+        _ = data.withUnsafeBytes {
+            function($0.baseAddress, UInt32(data.count), &result)
         }
-        
         return Data(result)
     }
 }
