@@ -2,6 +2,7 @@
 This is a iOS crypto library. It’s made to be convenient to use. It supports following functions:
 - [x] Symmetry Cipher
 - [x] Digest
+- [x] HMAC
 - [x] Convenience methods to handle Data and String
 
 For Symmetry Cipher, this library can check whether key and iv is valid, whether the algorithm is valid for certain padding and Cipher Mode.  you can iterate all possible algorithms, cipher modes and generate valid random key and iv. You can also check if certain algorithm is valid for certain mode. You can calculate AES256 with following code:
@@ -12,9 +13,9 @@ do {
     let key = try String(repeating: "1", count: 32).data(.ascii)
     let iv = try String(repeating: "1", count: 16).data(.ascii)
     let aes = try SymmetryCipher(algorithm: .aes, key: key, iv: iv)
-    let encrypted = try aes.encrypt(data: data)
+    let encrypted = try aes.encrypt(data)
     print("Cipher text: \(try encrypted.string(.hex))")
-    let decrypted = try aes.decrypt(data: encrypted)
+    let decrypted = try aes.decrypt(encrypted)
 } catch let error {
     print(error)
 }
@@ -24,7 +25,7 @@ For Digest, you can calculate `sha256` as simple as following:
 do {
     let plainText = "Hello world"
     let data = try plainText.data(.utf8)
-    let digest = try Digest.sha1.process(data: data).string(.hex)
+    let digest = try Digest.sha1.process(data).string(.hex)
     print("Plain text: \(plainText)")
     print("SHA256: \(digest)")
 } catch let error {
@@ -45,9 +46,9 @@ let key = try alghrithm.generateRandomKey()
 let iv = alghrithm.generateRandomIV()
 let cipher = try SymmetryCipher(algorithm: alghrithm, key: key, iv: iv)
 // Encrypt data
-let encrypted = try cipher.process(.encrypt, data: data)
+let encrypted = try cipher.process(.encrypt, data)
 // Decrypt data
-let decrypted = try cipher.process(.decrypt, data: encrypted)
+let decrypted = try cipher.process(.decrypt, encrypted)
 ```
 You can also speciafy padding and mode, use `encrypt` and `decrypt` method:
 ```swift
@@ -57,9 +58,9 @@ let key = try alghrithm.generateRandomKey()
 let iv = alghrithm.generateRandomIV()
 let cipher = try SymmetryCipher(algorithm: alghrithm, key: key, iv: iv, padding: .pkcs7, mode: .cbc)
 // Encrypt data
-let encrypted = try cipher.encrypt(data: data)
+let encrypted = try cipher.encrypt(data)
 // Decrypt data
-let decrypted = try cipher.decrypt(data: encrypted)
+let decrypted = try cipher.decrypt(encrypted)
 ```
 
 ### Iterate possible combinations
@@ -76,7 +77,7 @@ do {
             let cipher = try SymmetryCipher(algorithm: algorithm, key: key, iv: iv, mode: mode)
             if cipher.isValid {
                 let data = plainText.data(using: .utf8)!
-                let encrypted = try cipher.process(.encrypt, data: data)
+                let encrypted = try cipher.process(.encrypt, data)
                 print("Algorithm: \(String(describing: algorithm).uppercased())")
                 print("Mode: \(String(describing: mode).uppercased())")
                 print("key: \(key.hex)")
@@ -84,7 +85,7 @@ do {
                     print("iv: \(iv.hex)")
                 }
                 print("Cipher text: \(encrypted.hex)")
-                let decrypted = try cipher.process(.decrypt, data: encrypted)
+                let decrypted = try cipher.process(.decrypt, encrypted)
                 print("-----------------------------------------------------")
             }
         }
@@ -361,7 +362,7 @@ print(SymmetryCipher.Mode.ecb.needesIV())
 do {
     let plainText = "Hello world"
     let data = try plainText.data(.utf8)
-    let digest = try Digest.sha256.process(data: data).string(.hex)
+    let digest = try Digest.sha256.process(data).string(.hex)
     print("Plain text: \(plainText)")
     print("SHA256: \(digest)")
 } catch let error {
@@ -379,7 +380,7 @@ SHA256: 64ec88ca00b268e5ba1a35678a1b5316d212f4f366b2477232534a8aeca37f3c
 let plainText = "hello world"
 print("Plain text: \(plainText)")
 for digest in Digest.allCases {
-    let digested = digest.process(data: plainText.data(using: .utf8)!)
+    let digested = digest.process(plainText.data(using: .utf8)!)
     print("\(digest):\(digested.hex)")
     XCTAssert(digested.count == digest.length)
 }
@@ -398,6 +399,27 @@ sha512:309ecc489c12d6eb4cc40f50c902f2b4d0ed77ee511a7c7a9bcd3ca86d4cd86f989dd35bc
 ### Supported Algorithms
 * MD2
 * MD4
+* MD5
+* SHA1
+* SHA224
+* SHA256
+* SHA384
+* SHA512
+
+## HMAC
+
+### How to use
+
+```swift
+do {
+    let hmac = try HMAC(.sha256, key: "11111111111111111111".data(.hex))
+    print("Result: \(try hmac.process(try "Hello world".data(.utf8)).string(.hex))")
+} catch let error {
+    print(error)
+}
+```
+
+### Supported Algorithms
 * MD5
 * SHA1
 * SHA224

@@ -1,6 +1,6 @@
 import XCTest
 @testable import Crypto
-
+import CommonCrypto
 final class CryptoTests: XCTestCase {
     
     func testInBruteForce() throws {
@@ -15,8 +15,8 @@ final class CryptoTests: XCTestCase {
                             let cipher = try SymmetryCipher(algorithm: algorithm, key: key, iv: iv, padding: padding, mode: mode)
                             if algorithm.isValid(mode: mode, padding: padding) {
                                 let data = text.data(using: .utf8)!
-                                let encrypted = try cipher.process(.encrypt, data: data)
-                                let decrypted = try cipher.process(.decrypt, data: encrypted)
+                                let encrypted = try cipher.process(.encrypt, data)
+                                let decrypted = try cipher.process(.decrypt, encrypted)
                                 XCTAssert(data == decrypted)
                             }
                         }
@@ -40,7 +40,7 @@ final class CryptoTests: XCTestCase {
                     let cipher = try SymmetryCipher(algorithm: algorithm, key: key, iv: iv, mode: mode)
                     if cipher.isValid {
                         let data = plainText.data(using: .utf8)!
-                        let encrypted = try cipher.process(.encrypt, data: data)
+                        let encrypted = try cipher.process(.encrypt, data)
                         print("Algorithm: \(String(describing: algorithm).uppercased())")
                         print("Mode: \(String(describing: mode).uppercased())")
                         print("key: \(key.hex)")
@@ -48,7 +48,7 @@ final class CryptoTests: XCTestCase {
                             print("iv: \(iv.hex)")
                         }
                         print("Cipher text: \(encrypted.hex)")
-                        let decrypted = try cipher.process(.decrypt, data: encrypted)
+                        let decrypted = try cipher.process(.decrypt, encrypted)
                         print("-----------------------------------------------------")
                         XCTAssert(decrypted == data)
                     }
@@ -71,8 +71,8 @@ final class CryptoTests: XCTestCase {
                         let cipher = try SymmetryCipher(algorithm: algorithm, key: key, iv: iv, padding: padding, mode: mode)
                         if algorithm.isValid(mode: mode, padding: padding) {
                             let data = Data(random: Int(arc4random()) % 1000)
-                            let encrypted = try cipher.process(.encrypt, data: data)
-                            let decrypted = try cipher.process(.decrypt, data: encrypted)
+                            let encrypted = try cipher.process(.encrypt, data)
+                            let decrypted = try cipher.process(.decrypt, encrypted)
                             XCTAssert(data == decrypted)
                         }
                     }
@@ -96,7 +96,7 @@ final class CryptoTests: XCTestCase {
         let plainText = "hello world"
         print("Plain text: \(plainText)")
         for digest in Digest.allCases {
-            let digested = digest.process(data: plainText.data(using: .utf8)!)
+            let digested = digest.process(plainText.data(using: .utf8)!)
             print("\(digest):\(digested.hex)")
             XCTAssert(digested.count == digest.length)
         }
@@ -110,9 +110,9 @@ final class CryptoTests: XCTestCase {
             let key = try String(repeating: "1", count: SymmetryCipher.Algorithm.KeySize.aes128).data(.ascii)
             let iv = try String(repeating: "1", count: algorithm.blockSize).data(.ascii)
             let aes = try SymmetryCipher(algorithm: .aes, key: key, iv: iv)
-            let encrypted = try aes.encrypt(data: data)
+            let encrypted = try aes.encrypt(data)
             print("Cipher text: \(try encrypted.string(.hex))")
-            let decrypted = try aes.decrypt(data: encrypted)
+            let decrypted = try aes.decrypt(encrypted)
             XCTAssert(data == decrypted)
         } catch let error {
             objc_exception_throw(error)
@@ -127,9 +127,9 @@ final class CryptoTests: XCTestCase {
             let key = try String(repeating: "1", count: SymmetryCipher.Algorithm.KeySize.aes192).data(.ascii)
             let iv = try String(repeating: "1", count: algorithm.blockSize).data(.ascii)
             let aes = try SymmetryCipher(algorithm: .aes, key: key, iv: iv)
-            let encrypted = try aes.encrypt(data: data)
+            let encrypted = try aes.encrypt(data)
             print("Cipher text: \(try encrypted.string(.hex))")
-            let decrypted = try aes.decrypt(data: encrypted)
+            let decrypted = try aes.decrypt(encrypted)
             XCTAssert(data == decrypted)
         } catch let error {
             objc_exception_throw(error)
@@ -143,9 +143,9 @@ final class CryptoTests: XCTestCase {
             let key = try String(repeating: "1", count: 32).data(.ascii)
             let iv = try String(repeating: "1", count: 16).data(.ascii)
             let aes = try SymmetryCipher(algorithm: .aes, key: key, iv: iv)
-            let encrypted = try aes.encrypt(data: data)
+            let encrypted = try aes.encrypt(data)
             print("Cipher text: \(try encrypted.string(.hex))")
-            let decrypted = try aes.decrypt(data: encrypted)
+            let decrypted = try aes.decrypt(encrypted)
             XCTAssert(data == decrypted)
         } catch let error {
             objc_exception_throw(error)
@@ -156,11 +156,33 @@ final class CryptoTests: XCTestCase {
         do {
             let plainText = "Hello world"
             let data = try plainText.data(.utf8)
-            let digest = try Digest.sha256.process(data: data).string(.hex)
+            let digest = try Digest.sha256.process(data).string(.hex)
             print("Plain text: \(plainText)")
             print("SHA256: \(digest)")
         } catch let error {
             objc_exception_throw(error)
+        }
+    }
+    
+    func testHMACSHA256() {
+        do {
+            let hmac = try HMAC(.sha256, key: "11111111111111111111".data(.hex))
+            print("Result: \(try hmac.process(try "Hello world".data(.utf8)).string(.hex))")
+        } catch let error {
+            print(error)
+        }
+    }
+    
+    func testHMAC() {
+        do {
+            let plainText = "Hello world"
+            print("Plain Text: \(plainText)")
+            for algorithm in HMAC.Algorithm.allCases {
+                let hmac = try HMAC(algorithm, key: "11111111111111111111".data(.hex))
+                print("HMAC " + String(describing: algorithm).uppercased() + ":", try hmac.process(plainText.data(.ascii)).string(.hex))
+            }
+        } catch let error {
+            print(error)
         }
     }
 

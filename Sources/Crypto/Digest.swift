@@ -67,7 +67,7 @@ public enum Digest: CaseIterable {
         }
     }
     
-    public func process(data: Data) -> Data {
+    public func process(_ data: Data) -> Data {
         var result = [UInt8](repeating: 0, count: length)
         _ = data.withUnsafeBytes {
             function($0.baseAddress, UInt32(data.count), &result)

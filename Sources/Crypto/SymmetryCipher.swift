@@ -93,15 +93,15 @@ public struct SymmetryCipher {
         return algorithm.isValid(mode: mode, padding: padding)
     }
     
-    public func encrypt(data:  Data) throws -> Data {
-        try process(.encrypt, data: data)
+    public func encrypt(_ data:  Data) throws -> Data {
+        try process(.encrypt, data)
     }
     
-    public func decrypt(data: Data) throws -> Data {
-        try process(.decrypt, data: data)
+    public func decrypt(_ data: Data) throws -> Data {
+        try process(.decrypt, data)
     }
     
-    public func process(_ operation: Operation, data: Data) throws -> Data {
+    public func process(_ operation: Operation, _ data: Data) throws -> Data {
         var cryptor: CCCryptorRef? = nil
         defer {
             CCCryptorRelease(cryptor)

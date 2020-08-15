@@ -25,7 +25,7 @@ public extension String {
     }
     
     func digest(_ algorithm: Digest) throws -> String {
-        try algorithm.process(data: try data(.utf8)).string(.hex)
+        try algorithm.process(try data(.utf8)).string(.hex)
     }
     
 }
