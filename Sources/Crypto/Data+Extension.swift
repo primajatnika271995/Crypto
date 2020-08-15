@@ -81,7 +81,7 @@ public extension Data {
         }
     }
     
-    func string(_ encoding: Encoding) throws -> String  {
+    func string(_ encoding: Encoding) throws -> String {
         var value: String?
         switch encoding {
         case .ascii:

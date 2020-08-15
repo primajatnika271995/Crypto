@@ -7,6 +7,7 @@
 //
 import CommonCrypto
 import Foundation
+
 public enum CryptoError: Error {
     
     case invalidIV
@@ -16,6 +17,7 @@ public enum CryptoError: Error {
     case codingError
     
 }
+
 public enum CCError: CCCryptorStatus, Error {
     
     case paramError         = -4300

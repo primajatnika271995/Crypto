@@ -6,6 +6,7 @@
 //
 import CommonCrypto
 import Foundation
+
 public enum Digest: CaseIterable {
     
     case md2
