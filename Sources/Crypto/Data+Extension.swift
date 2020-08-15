@@ -87,15 +87,15 @@ public extension Data {
         case .ascii:
             value = String(data: self, encoding: .ascii)
         case .utf8:
-            let value = String(data: self, encoding: .utf8)
+            value = String(data: self, encoding: .utf8)
         case .hex:
             value = hex
         case .base64:
             value = self.base64EncodedString()
         }
-        guard let value = value else {
+        guard let item = value else {
             throw CryptoError.codingError
         }
-        return value
+        return item
     }
 }
