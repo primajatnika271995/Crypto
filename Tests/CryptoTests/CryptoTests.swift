@@ -27,6 +27,39 @@ final class CryptoTests: XCTestCase {
         }
     }
     
+    func testSymmetryCipherWithHelloWorld() {
+        do {
+            let plainText = "Hello world"
+            print("Plain text: \(plainText)")
+            print("-----------------------------------------------------")
+            for algorithm in SymmetryCipher.Algorithm.allCases {
+                for mode in SymmetryCipher.Mode.allCases {
+                    let key = try algorithm.generateRandomKey()
+                    let iv = mode.needesIV() ? algorithm.generateRandomIV() : Data()
+                    let cipher = try SymmetryCipher(algorithm: algorithm, key: key, iv: iv, mode: mode)
+                    if cipher.isValid {
+                        let data = plainText.data(using: .utf8)!
+                        let encrypted = try cipher.process(.encrypt, data: data)
+                        print("Algorithm: \(String(describing: algorithm).uppercased())")
+                        print("Mode: \(String(describing: mode).uppercased())")
+                        print("key: \(key.hex)")
+                        if mode.needesIV() {
+                            print("iv: \(iv.hex)")
+                        }
+                        print("Cipher text: \(encrypted.hex)")
+                        let decrypted = try cipher.process(.decrypt, data: encrypted)
+                        print("-----------------------------------------------------")
+                        XCTAssert(decrypted == data)
+                    }
+                }
+            }
+        } catch let error {
+            print("Error:\(error)")
+            objc_exception_throw(error)
+        }
+        
+    }
+    
     func testRandomly() throws {
         do {
             for algorithm in SymmetryCipher.Algorithm.allCases {
@@ -76,10 +109,10 @@ final class CryptoTests: XCTestCase {
     func testDigests() {
         let plainText = "hello world"
         print("Plain text: \(plainText)")
-        for item in Digest.allCases {
-            let digested = item.process(data: plainText.data(using: .utf8)!)
-            print("\(item):\(digested.hex)")
-            XCTAssert(digested.count > 0)
+        for digest in Digest.allCases {
+            let digested = digest.process(data: plainText.data(using: .utf8)!)
+            print("\(digest):\(digested.hex)")
+            XCTAssert(digested.count == digest.length)
         }
     }
 

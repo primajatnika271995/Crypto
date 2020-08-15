@@ -6,17 +6,25 @@
 //
 import CommonCrypto
 import Foundation
-enum Digest: CaseIterable {
+public enum Digest: CaseIterable {
+    
     case md2
+    
     case md4
+    
     case md5
+    
     case sha1
+    
     case sha224
+    
     case sha256
+    
     case sha384
+    
     case sha512
     
-    var length: Int {
+    public var length: Int {
         switch self {
         case .md2:
             return Int(CC_MD2_DIGEST_LENGTH)
@@ -37,7 +45,7 @@ enum Digest: CaseIterable {
         }
     }
     
-    var function: ((_ data: UnsafeRawPointer?, _ len: CC_LONG, _ md: UnsafeMutablePointer<UInt8>?) -> UnsafeMutablePointer<UInt8>?) {
+    public var function: ((_ data: UnsafeRawPointer?, _ len: CC_LONG, _ md: UnsafeMutablePointer<UInt8>?) -> UnsafeMutablePointer<UInt8>?) {
         switch self {
         case .md2:
             return CC_MD2
@@ -58,7 +66,7 @@ enum Digest: CaseIterable {
         }
     }
     
-    func process(data: Data) -> Data {
+    public func process(data: Data) -> Data {
         var result = [UInt8](repeating: 0, count: length)
         _ = data.withUnsafeBytes {
             function($0.baseAddress, UInt32(data.count), &result)

@@ -89,6 +89,10 @@ public struct SymmetryCipher {
         self.mode = mode
     }
     
+    public var isValid: Bool {
+        return algorithm.isValid(mode: mode, padding: padding)
+    }
+    
     public func encrypt(data:  Data) throws -> Data {
         try process(.encrypt, data: data)
     }
