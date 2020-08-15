@@ -11,7 +11,9 @@ public enum CryptoError: Error {
     
     case invalidIV
     
-    case invalidCipher(SymmetryCipher)
+    case invalidKey
+    
+    case codingError
     
 }
 public enum CCError: CCCryptorStatus, Error {

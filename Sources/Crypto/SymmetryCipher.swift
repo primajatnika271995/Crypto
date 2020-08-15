@@ -80,7 +80,7 @@ public struct SymmetryCipher {
     public let mode: Mode
     
     public init(algorithm: Algorithm, key: Data, iv: Data = Data(), padding: Padding = .pkcs7, mode: Mode = .cbc) throws {
-        guard algorithm.isValidKeySize(key.count) else { throw CCError.keySizeError }
+        guard algorithm.isValidKeySize(key.count) else { throw CryptoError.invalidKey }
         if mode.needesIV() && iv.count != algorithm.blockSize { throw CryptoError.invalidIV }
         self.algorithm = algorithm
         self.key = key
@@ -227,6 +227,25 @@ extension SymmetryCipher.Algorithm {
     
     public func generateRandomIV() -> Data {
         return Data(random: blockSize)
+    }
+    
+    public func keySizes() -> [Int] {
+        switch self {
+        case .aes:
+            return KeySizes.aes
+        case .des:
+            return KeySizes.des
+        case .des3:
+            return KeySizes.des3
+        case .cast:
+            return Array(KeySizes.cast)
+        case .rc4:
+            return Array(KeySizes.rc4)
+        case .rc2:
+            return Array(KeySizes.rc2)
+        case .blowfish:
+            return Array(KeySizes.blowfish)
+        }
     }
 
     public func isValidKeySize(_ size: Int) -> Bool {

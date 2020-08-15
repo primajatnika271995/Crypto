@@ -8,11 +8,69 @@
 
 import Foundation
 public extension Data {
+    
+    init(hex: String) {
+        self.init()
+        var buffer: UInt8?
+        var skip = hex.hasPrefix("0x") ? 2 : 0
+        for char in hex.unicodeScalars.lazy {
+            guard skip == 0 else {
+                skip -= 1
+                continue
+            }
+            guard char.value >= 48 && char.value <= 102 else {
+                removeAll()
+                return
+            }
+            let v: UInt8
+            let c: UInt8 = UInt8(char.value)
+            switch c {
+            case let c where c <= 57:
+                v = c - 48
+            case let c where c >= 65 && c <= 70:
+                v = c - 55
+            case let c where c >= 97:
+                v = c - 87
+            default:
+                removeAll()
+                return
+            }
+            if let b = buffer {
+                append(b << 4 | v)
+                buffer = nil
+            } else {
+                buffer = v
+            }
+        }
+        if let b = buffer {
+            append(b)
+        }
+    }
+    
+    init(ascii: String) throws {
+        let data = ascii.data(using: .ascii)
+        if let data = data {
+            self = data
+        } else {
+            throw CryptoError.codingError
+        }
+    }
+    
+    init(utf8: String) throws {
+        let data = utf8.data(using: .utf8)
+        if let data = data {
+            self = data
+        } else {
+            throw CryptoError.codingError
+        }
+    }
+    
     init(random count: Int) {
         var items = [UInt8](repeating: 0, count: count)
         arc4random_buf(&items, items.count)
         self.init(items)
     }
+    
     var hex: String {
         return `lazy`.reduce("") {
             var s = String($1, radix: 16)
@@ -20,6 +78,25 @@ public extension Data {
                 s = "0" + s
             }
             return $0 + s
+        }
+    }
+    
+    func string(encoding: Encoding) throws -> String  {
+        switch encoding {
+        case .ascii:
+            guard let value = String(data: self, encoding: .ascii) else {
+                throw CryptoError.codingError
+            }
+            return value
+        case .utf8:
+            guard let value = String(data: self, encoding: .utf8) else {
+                throw CryptoError.codingError
+            }
+            return value
+        case .hex:
+            return hex
+        case .base64:
+            return self.base64EncodedString()
         }
     }
 }
