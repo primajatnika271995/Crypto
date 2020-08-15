@@ -2,6 +2,8 @@
 This is a iOS crypto library. It’s made to be convenient to use. It supports following functions:
 - [x] Symmetry Cipher
 - [x] Digest
+- [x] Convenience methods to handle Data and String
+
 For Symmetry Cipher, this library can check whether key and iv is valid, whether the algorithm is valid for certain padding and Cipher Mode.  you can iterate all possible algorithms, cipher modes and generate valid random key and iv. You can also check if certain algorithm is valid for certain mode. You can calculate AES256 with following code:
 ```swift
 do {
@@ -17,7 +19,18 @@ do {
     print(error)
 }
 ```
-For Digest, you can calculate `sha1` as simple as using `*try* Digest.sha1.process(data: "hello world".data(.utf8))`. 
+For Digest, you can calculate `sha256` as simple as following:
+```swift
+do {
+    let plainText = "Hello world"
+    let data = try plainText.data(.utf8)
+    let digest = try Digest.sha1.process(data: data).string(.hex)
+    print("Plain text: \(plainText)")
+    print("SHA256: \(digest)")
+} catch let error {
+    print("Error:", error)
+}
+```
 ## Integration
 This is an Swift Package. In Xcode, you may choose File->Swift Packages->Add Pakcage dependancies, and add https://github.com/LoniQin/iOSCrypto.
 ## Symmetry Cipher
