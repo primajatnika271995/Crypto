@@ -58,6 +58,9 @@ let decrypted = try cipher.decrypt(data: encrypted)
 ### Check whether an algorithm supports certain mode and padding
 ```swift
 print(SymmetryCipher.Algorithm.aes.isValid(mode: .ctr, padding: .pkcs7))
+// prints true
+print(SymmetryCipher.Algorithm.rc4.isValid(mode: .ctr, padding: .pkcs7))
+// prints false
 ```
 ### Check whether we need IV parameter in certain mode
 ```swift
@@ -66,3 +69,5 @@ print(SymmetryCipher.Mode.cbc.needesIV())
 print(SymmetryCipher.Mode.ecb.needesIV())
 // prints false
 ```
+## Integration
+Choose **File**->**Swift Packages**->**Add Pakcage dependancies**, and add https://github.com/LoniQin/iOSCrypto/edit/master to it.
