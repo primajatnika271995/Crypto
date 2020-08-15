@@ -72,6 +72,16 @@ final class CryptoTests: XCTestCase {
         print(SymmetryCipher.Mode.cbc.needesIV())
         print(SymmetryCipher.Mode.ecb.needesIV())
     }
+    
+    func testDigests() {
+        let plainText = "hello world"
+        print("Plain text: \(plainText)")
+        for item in Digest.allCases {
+            let digested = item.process(data: plainText.data(using: .utf8)!)
+            print("\(item):\(digested.hex)")
+            XCTAssert(digested.count > 0)
+        }
+    }
 
     static var allTests = [
         ("testInBruteForce", testInBruteForce),
