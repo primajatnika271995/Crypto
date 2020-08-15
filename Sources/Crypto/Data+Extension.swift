@@ -82,21 +82,20 @@ public extension Data {
     }
     
     func string(_ encoding: Encoding) throws -> String  {
+        var value: String?
         switch encoding {
         case .ascii:
-            guard let value = String(data: self, encoding: .ascii) else {
-                throw CryptoError.codingError
-            }
-            return value
+            value = String(data: self, encoding: .ascii)
         case .utf8:
-            guard let value = String(data: self, encoding: .utf8) else {
-                throw CryptoError.codingError
-            }
-            return value
+            let value = String(data: self, encoding: .utf8)
         case .hex:
-            return hex
+            value = hex
         case .base64:
-            return self.base64EncodedString()
+            value = self.base64EncodedString()
         }
+        guard let value = value else {
+            throw CryptoError.codingError
+        }
+        return value
     }
 }
