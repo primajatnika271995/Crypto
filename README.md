@@ -36,7 +36,10 @@ import Crypto
 do {
     let plainText = "I am fine"
     var key = "1111111111111111"
-    let iv = "11111111"
+    var iv = "1111111111111111"
+    // AES
+    print(try plainText.process(.aes(.encrypt, key: key, iv: iv)))
+    iv = "11111111"
     // RC2
     print(try plainText.process(.rc2(.encrypt, key: key, iv: iv)))
     // CAST
