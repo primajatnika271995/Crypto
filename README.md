@@ -1,5 +1,5 @@
 # Crypto
-This is a iOS crypto library. It’s made to be convenient to use and support as many crypto methods as possible. It supports following functions:
+This is a swift crypto library. It’s made to be convenient to use and support as many crypto methods as possible. It supports following functions:
 - [x] Symmetry Cipher
 - [x] Digest
 - [x] HMAC
