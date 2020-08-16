@@ -455,7 +455,7 @@ import Crypto
 
 do {
     for algorithm in HMAC.Algorithm.allCases {
-        print(try "Hello world".process(.init(.hmac(algorithm), [.key: "11111111111111111111"])))
+        print(try "Hello world".process(.hmac(algorithm, key: "11111111111111111111")))
     }
     /*
     927021484b9e56f8b4075b3892b69e40dbfddb82
