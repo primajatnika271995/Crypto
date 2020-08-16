@@ -1,14 +1,14 @@
 # Crypto
 This is a swift crypto library. It’s made to be convenient to use and support as many crypto methods as possible. It supports following functions:
-- [x] Symmetry Cipher
+- [x] Symmetric Cipher
 - [x] Digest
 - [x] HMAC
 - [x] Convenience methods
-- [ ] Asymmetry Cipher
+- [ ] Asymmetric Cipher
 
 ## Integration
 It's very easy to integrate, you just need Swift Package Manager, which is already installed with XCode. In Xcode, you can choose File->Swift Packages->Add Pakcage dependancies, and add https://github.com/LoniQin/Crypto.
-## Symmetry Cipher
+## Symmetric Cipher
 ### How to use
 
 ```swift
@@ -346,6 +346,7 @@ print(SymmetryCipher.Algorithm.rc4.isValid(mode: .ctr, padding: .none))
 // prints false
 ```
 ### Check whether iv is needed
+Only ECB mode don't support iv parameter.
 ```swift
 import Crypto
 
