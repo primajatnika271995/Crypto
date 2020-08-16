@@ -3,7 +3,8 @@ This is a iOS crypto library. It’s made to be convenient to use. It supports f
 - [x] Symmetry Cipher
 - [x] Digest
 - [x] HMAC
-- [x] Convenience methods to handle Data and String
+- [x] Convenience methods
+- [ ] Asymmetry Cipher
 
 For Symmetry Cipher, this library can check whether key and iv is valid, whether the algorithm is valid for certain padding and Cipher Mode.  you can iterate all possible algorithms, cipher modes and generate valid random key and iv. You can also check if certain algorithm is valid for certain mode. You can calculate AES256 with following code:
 ```swift
