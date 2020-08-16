@@ -206,6 +206,14 @@ final class CryptoTests: XCTestCase {
         XCTAssertEqual(try plainText.process(.init(.digest(.sha256))), "cf39f63b0188d40bb46686d2c0d092d9367650710ec5a869b41e5b1448c510f4")
     }
     
+    func testIVSize() {
+        XCTAssertEqual(SymmetricCipher.Algorithm.aes.keySizes(), [16, 24, 32])
+        XCTAssertEqual(SymmetricCipher.Algorithm.aes.ivSize(mode: .cbc), 16)
+        XCTAssertEqual(SymmetricCipher.Algorithm.aes.ivSize(mode: .ecb), 0)
+        XCTAssertTrue(SymmetricCipher.Algorithm.aes.isValidKeySize(32))
+        XCTAssertFalse(SymmetricCipher.Algorithm.aes.isValidKeySize(40))
+    }
+    
     func testStringProcessWithHMAC() {
         let plainText = "I am fine"
         let key = "11111111111111111111"

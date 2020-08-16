@@ -215,26 +215,6 @@ public extension SymmetricCipher.Algorithm {
         }
     }
     
-    func generateRandomKey(size: Int? = nil) throws -> Data {
-        var actualSize = 0
-        if let size = size {
-            guard isValidKeySize(size) else { throw CCError.keySizeError }
-            actualSize = size
-        } else {
-            switch self {
-            case .aes, .des3:
-                actualSize = 24
-            default:
-                actualSize = 8
-            }
-        }
-        return Data(random: actualSize)
-    }
-    
-    func generateRandomIV() -> Data {
-        return Data(random: blockSize)
-    }
-    
     func keySizes() -> [Int] {
         switch self {
         case .aes:
@@ -252,6 +232,10 @@ public extension SymmetricCipher.Algorithm {
         case .blowfish:
             return Array(KeySize.blowfish)
         }
+    }
+    
+    func ivSize(mode: SymmetricCipher.Mode) -> Int {
+        return mode.needesIV() ? blockSize : 0
     }
 
     func isValidKeySize(_ size: Int) -> Bool {
@@ -284,6 +268,26 @@ public extension SymmetricCipher.Algorithm {
                 return mode != .rc4
             }
         }
+    }
+    
+    func generateRandomKey(size: Int? = nil) throws -> Data {
+        var actualSize = 0
+        if let size = size {
+            guard isValidKeySize(size) else { throw CCError.keySizeError }
+            actualSize = size
+        } else {
+            switch self {
+            case .aes, .des3:
+                actualSize = 24
+            default:
+                actualSize = 8
+            }
+        }
+        return Data(random: actualSize)
+    }
+    
+    func generateRandomIV() -> Data {
+        return Data(random: blockSize)
     }
     
 }

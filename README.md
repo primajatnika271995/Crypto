@@ -345,15 +345,23 @@ print(SymmetricCipher.Algorithm.aes.isValid(mode: .ctr, padding: .pkcs7))
 print(SymmetricCipher.Algorithm.rc4.isValid(mode: .ctr, padding: .none))
 // prints false
 ```
-### Check whether iv is needed
-Only ECB mode don't support iv parameter.
+### Key size and IV size
+When we use Symmetric Cipher, it's important to know the valid key size and iv size.
 ```swift
 import Crypto
 
-print(SymmetricCipher.Mode.cbc.needesIV())
-// prints true
-print(SymmetricCipher.Mode.ecb.needesIV())
-// prints false
+// Get possible key sizes of AES algorithm
+print(SymmetricCipher.Algorithm.aes.keySizes())
+// prints [16, 24, 32]
+// Get iv size of AES algorithm in CBC mode
+print(SymmetricCipher.Algorithm.aes.ivSize(mode: .cbc))
+// prints 16
+// Get iv size of AES algorithm in ECB mode
+print(SymmetricCipher.Algorithm.aes.ivSize(mode: .ecb))
+// prints 0
+// Test whether key size is valid
+print(SymmetricCipher.Algorithm.aes.isValidKeySize(32))
+print(SymmetricCipher.Algorithm.aes.isValidKeySize(40))
 ```
 
 ## Digest
