@@ -9,38 +9,23 @@ This is a iOS crypto library. It’s made to be convenient to use and support as
 ## Integration
 This is an Swift Package. In Xcode, you may choose File->Swift Packages->Add Pakcage dependancies, and add https://github.com/LoniQin/Crypto.
 ## Symmetry Cipher
-### Implement a Symmetric Cipher
+### How to use
 
 ```swift
-import Crypto
-
-let alghrithm: SymmetryCipher.Algorithm = .aes
-let data = "Hello world".data(using: .utf8)!
-// Generate random key
-let key = try alghrithm.generateRandomKey()
-// Generate random IV
-let iv = alghrithm.generateRandomIV()
-let cipher = try SymmetryCipher(algorithm: alghrithm, key: key, iv: iv)
-// Encrypt data
-let encrypted = try cipher.process(.encrypt, data)
-// Decrypt data
-let decrypted = try cipher.process(.decrypt, encrypted)
-```
-
-You can also speciafy padding and mode, use `encrypt` and `decrypt` method:
-
-```swift
-import Crypto
-
-let alghrithm: SymmetryCipher.Algorithm = .aes
-let data = "Hello world".data(using: .utf8)!
-let key = try alghrithm.generateRandomKey()
-let iv = alghrithm.generateRandomIV()
-let cipher = try SymmetryCipher(algorithm: alghrithm, key: key, iv: iv, padding: .pkcs7, mode: .cbc)
-// Encrypt data
-let encrypted = try cipher.encrypt(data)
-// Decrypt data
-let decrypted = try cipher.decrypt(encrypted)
+do {
+    let data = try "I am fine".data(.utf8)
+    let key = try "1111111111111111".data(.utf8)
+    let iv = try "1111111111111111".data(.utf8)
+    let cipher = try SymmetryCipher(algorithm: .aes, key: key, iv: iv)
+    // Encrypt data
+    let encrypted = try cipher.encrypt(data)
+    // Decrypt data
+    let decrypted = try cipher.decrypt(encrypted)
+    print(try encrypted.string(.base64))
+    print(try decrypted.string(.utf8))
+} catch let error {
+    print(error)
+}
 ```
 
 Or:
