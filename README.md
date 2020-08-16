@@ -443,6 +443,19 @@ SHA256: 64ec88ca00b268e5ba1a35678a1b5316d212f4f366b2477232534a8aeca37f3c
 */
 ```
 
+Or
+
+```swift
+do {
+    let plainText = "I am fine"
+    print(try plainText.process(.md5))
+    print(try plainText.process(.sha1))
+    print(try plainText.process(.sha256))
+} catch let error {
+    print(error)
+}
+```
+
 ### Iterate all digests
 
 ```swift
