@@ -15,4 +15,6 @@ public enum CryptoError: Error {
     
     case codingError
     
+    case invalidParams
+    
 }

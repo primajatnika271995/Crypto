@@ -42,6 +42,12 @@ public extension String {
         case .digest, .hmac:
             fromEncoding = options[.fromEncoding] ?? .utf8
             toEncoding = options[.toEncoding] ?? .hex
+        case .changeEncoding:
+            if let from: Crypto.Encoding = options[.fromEncoding], let to: Crypto.Encoding = options[.toEncoding] {
+                return try data(from).string(to)
+            } else {
+                throw CryptoError.invalidParams
+            }
         }
         return try data(fromEncoding).process(options).string(toEncoding)
     }

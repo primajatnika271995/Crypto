@@ -36,6 +36,8 @@ public struct ProcessOptions {
         
         case hmac(HMAC.Algorithm)
         
+        case changeEncoding
+        
     }
     
     public let method: Method

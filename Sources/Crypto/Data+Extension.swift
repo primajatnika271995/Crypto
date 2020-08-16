@@ -109,6 +109,8 @@ public extension Data {
         case .hmac(let algorithm):
             guard let key: DataConvertable = options[.key]  else { throw CryptoError.invalidKey }
             return try HMAC(algorithm, key: key.toData()).process(self)
+        case .changeEncoding:
+            return self
         }
     }
     
