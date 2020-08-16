@@ -108,28 +108,32 @@ public struct StringProcessOptions {
         return StringProcessOptions(.decrypt(.aes), [.key: key, .iv: iv])
     }
     
+    public static func hmac(_ algorithm: HMAC.Algorithm, key: DataConvertable) -> StringProcessOptions {
+        StringProcessOptions(.hmac(algorithm), [.key: key])
+    }
+    
     public static func hmacmd5(key: DataConvertable) -> StringProcessOptions {
-        return StringProcessOptions(.hmac(.md5), [.key: key])
+        hmac(.md5, key: key)
     }
     
     public static func hmacsha1(key: DataConvertable) -> StringProcessOptions {
-        StringProcessOptions(.hmac(.sha1), [.key: key])
+        hmac(.sha1, key: key)
     }
     
     public static func hmacsha224(key: DataConvertable) -> StringProcessOptions {
-        StringProcessOptions(.hmac(.sha224), [.key: key])
+        hmac(.sha224, key: key)
     }
     
     public static func hmacsha256(key: DataConvertable) -> StringProcessOptions {
-        StringProcessOptions(.hmac(.sha256), [.key: key])
+         hmac(.sha256, key: key)
     }
     
     public static func hmacsha384(key: DataConvertable) -> StringProcessOptions {
-        StringProcessOptions(.hmac(.sha384), [.key: key])
+        hmac(.sha384, key: key)
     }
     
     public static func hmacsha512(key: DataConvertable) -> StringProcessOptions {
-        StringProcessOptions(.hmac(.sha512), [.key: key])
+        hmac(.sha512, key: key)
     }
     
 }
