@@ -97,4 +97,39 @@ public extension Data {
         }
         return item
     }
+    
+    func process(_ options: ProcessOptions) throws -> Data {
+        switch options.method {
+        case .encrypt(let algorithm):
+            return try symmetryCrypt(algorithm, .encrypt, options)
+        case .decrypt(let algorithm):
+            return try symmetryCrypt(algorithm, .decrypt, options)
+        case .digest(let digest):
+            return digest.process(self)
+        case .hmac(let algorithm):
+            guard let key: DataConvertable = options[.key]  else { throw CryptoError.invalidKey }
+            return try HMAC(algorithm, key: key.toData()).process(self)
+        }
+    }
+    
+    func symmetryCrypt(_ algorithm: SymmetryCipher.Algorithm, _ operation: SymmetryCipher.Operation, _ options: ProcessOptions) throws -> Data {
+        let mode: SymmetryCipher.Mode = options[.mode] ?? .cbc
+        let padding: SymmetryCipher.Padding = options[.padding] ?? .pkcs7
+        guard let key: DataConvertable = options[.key] else { throw CryptoError.invalidKey }
+        var iv: DataConvertable!
+        if let theIV: DataConvertable = options[.iv] {
+            iv = theIV
+        } else {
+            iv = Data()
+        }
+        let cipher = try SymmetryCipher(
+            algorithm: algorithm,
+            key: key.toData(),
+            iv: iv.toData(),
+            padding: padding,
+            mode: mode
+        )
+        return try cipher.process(operation, self)
+    }
+
 }
