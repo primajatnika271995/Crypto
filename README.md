@@ -38,28 +38,6 @@ do {
 }
 ```
 
-You can also use convenience method:
-
-```swift
-import Crypto
-
-do {
-    let plainText = "Hello world"
-    let key = "1111111111111111"
-    let iv = "1111111111111111"
-    // Caculate AES
-    print("AES: ", try plainText.process(.aesEncrypt(key: key, iv: iv)))
-    // Caculate MD5
-    print("MD5: ", try plainText.process(.md5))
-    // Caculate SHA1
-    print("SHA1: ", try plainText.process(.sha1))
-    // Caculate HMACSHA1
-    print("HMACSHA1: ", try plainText.process(.hmacsha1(key: key)))
-} catch let error {
-    print(error)
-}
-```
-
 ## Integration
 This is an Swift Package. In Xcode, you may choose File->Swift Packages->Add Pakcage dependancies, and add https://github.com/LoniQin/Crypto.
 ## Symmetry Cipher
@@ -97,7 +75,7 @@ let encrypted = try cipher.encrypt(data)
 let decrypted = try cipher.decrypt(encrypted)
 ```
 
-Or you can try this way:
+Or:
 
 ```swift
 import Crypto
