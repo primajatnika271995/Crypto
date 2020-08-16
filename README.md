@@ -1,5 +1,5 @@
 # Crypto
-This is a iOS crypto library. It’s made to be convenient to use and support as many crypto methods as possible. It supports following functions:
+This is a swift crypto library. It’s made to be convenient to use and support as many crypto methods as possible. It supports following functions:
 - [x] Symmetry Cipher
 - [x] Digest
 - [x] HMAC
@@ -39,8 +39,6 @@ do {
     let iv = "11111111"
     // RC2
     print(try plainText.process(.rc2(.encrypt, key: key, iv: iv)))
-    // RC4
-    print(SymmetryCipher.Algorithm.KeySize.rc4)
     // CAST
     print(try plainText.process(.cast(.encrypt, key: key, iv: iv)))
     // BLOWFISH
@@ -48,6 +46,7 @@ do {
     // Tripple DES
     key = "111111111111111111111111"
     print(try plainText.process(.des3(.encrypt, key: key, iv: iv)))
+    // RC4
     print(try plainText.process(.rc4(.encrypt, key: key, iv: iv)))
 } catch let error {
     print(error)
