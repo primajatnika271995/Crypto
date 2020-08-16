@@ -6,38 +6,6 @@ This is a iOS crypto library. It’s made to be convenient to use. It supports f
 - [x] Convenience methods
 - [ ] Asymmetry Cipher
 
-For Symmetry Cipher, this library can check whether key and iv is valid, whether the algorithm is valid for certain padding and Cipher Mode.  you can iterate all possible algorithms, cipher modes and generate valid random key and iv. You can also check if certain algorithm is valid for certain mode. You can calculate AES256 with following code:
-```swift
-import Crypto
-
-do {
-    let plainText = "Hello world"
-    let data = try plainText.data(.utf8)
-    let key = try String(repeating: "1", count: 32).data(.ascii)
-    let iv = try String(repeating: "1", count: 16).data(.ascii)
-    let aes = try SymmetryCipher(algorithm: .aes, key: key, iv: iv)
-    let encrypted = try aes.encrypt(data)
-    print("Cipher text: \(try encrypted.string(.hex))")
-    let decrypted = try aes.decrypt(encrypted)
-} catch let error {
-    print(error)
-}
-```
-For Digest, you can calculate `sha256` as simple as following:
-```swift
-import Crypto
-
-do {
-    let plainText = "Hello world"
-    let data = try plainText.data(.utf8)
-    let digest = try Digest.sha1.process(data).string(.hex)
-    print("Plain text: \(plainText)")
-    print("SHA256: \(digest)")
-} catch let error {
-    print("Error:", error)
-}
-```
-
 ## Integration
 This is an Swift Package. In Xcode, you may choose File->Swift Packages->Add Pakcage dependancies, and add https://github.com/LoniQin/Crypto.
 ## Symmetry Cipher
