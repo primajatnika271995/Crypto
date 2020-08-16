@@ -1,21 +1,21 @@
 # Crypto
 This is a swift crypto library. It’s made to be convenient to use and support as many crypto methods as possible. It supports following functions:
-- [x] Symmetry Cipher
+- [x] Symmetric Cipher
 - [x] Digest
 - [x] HMAC
 - [x] Convenience methods
-- [ ] Asymmetry Cipher
+- [ ] Asymmetric Cipher
 
 ## Integration
-This is an Swift Package. In Xcode, you may choose File->Swift Packages->Add Pakcage dependancies, and add https://github.com/LoniQin/Crypto.
-## Symmetry Cipher
+It's very easy to integrate, you just need Swift Package Manager, which is already installed with XCode. In Xcode, you can choose File->Swift Packages->Add Pakcage dependancies, and add https://github.com/LoniQin/Crypto.
+## Symmetric Cipher
 ### How to use
 
 ```swift
 do {
     let data = try "I am fine".data(.utf8)
-    let key = try "1111111111111111".data(.utf8)
-    let iv = try "1111111111111111".data(.utf8)
+    let key = try "1111111111111111".data(.ascii)
+    let iv = try "1111111111111111".data(.ascii)
     let cipher = try SymmetryCipher(.aes, key: key, iv: iv)
     // Encrypt data
     let encrypted = try cipher.encrypt(data)
@@ -36,7 +36,10 @@ import Crypto
 do {
     let plainText = "I am fine"
     var key = "1111111111111111"
-    let iv = "11111111"
+    var iv = "1111111111111111"
+    // AES
+    print(try plainText.process(.aes(.encrypt, key: key, iv: iv)))
+    iv = "11111111"
     // RC2
     print(try plainText.process(.rc2(.encrypt, key: key, iv: iv)))
     // CAST
@@ -343,6 +346,7 @@ print(SymmetryCipher.Algorithm.rc4.isValid(mode: .ctr, padding: .none))
 // prints false
 ```
 ### Check whether iv is needed
+Only ECB mode don't support iv parameter.
 ```swift
 import Crypto
 
