@@ -3,7 +3,7 @@ import XCTest
 import CommonCrypto
 final class CryptoTests: XCTestCase {
     
-    func testInBruteForce() throws {
+    func testBruteForce() throws {
         let texts = ["🐱🐱🐱", "Hello world", ""]
         do {
             for text in texts {
@@ -60,7 +60,7 @@ final class CryptoTests: XCTestCase {
         
     }
     
-    func testRandomly() throws {
+    func testInRandom() throws {
         do {
             for algorithm in SymmetryCipher.Algorithm.allCases {
                 for mode in SymmetryCipher.Mode.allCases {
@@ -224,8 +224,8 @@ final class CryptoTests: XCTestCase {
     }
 
     static var allTests = [
-        ("testInBruteForce", testInBruteForce),
-        ("testRandomly", testRandomly),
+        ("testInBruteForce", testBruteForce),
+        ("testInRandom", testInRandom),
         ("testAES", testAES128)
     ]
 }
