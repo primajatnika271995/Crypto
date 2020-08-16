@@ -7,7 +7,7 @@ This is a swift crypto library. It’s made to be convenient to use and support 
 - [ ] Asymmetry Cipher
 
 ## Integration
-This is a Swift Package. It's very easy to integrate, you just need Swift Package Manager, which is already installed with XCode. In Xcode, you can choose File->Swift Packages->Add Pakcage dependancies, and add https://github.com/LoniQin/Crypto.
+It's very easy to integrate, you just need Swift Package Manager, which is already installed with XCode. In Xcode, you can choose File->Swift Packages->Add Pakcage dependancies, and add https://github.com/LoniQin/Crypto.
 ## Symmetry Cipher
 ### How to use
 
