@@ -61,7 +61,7 @@ do {
 ```
 
 ## Integration
-This is an Swift Package. In Xcode, you may choose File->Swift Packages->Add Pakcage dependancies, and add https://github.com/LoniQin/iOSCrypto.
+This is an Swift Package. In Xcode, you may choose File->Swift Packages->Add Pakcage dependancies, and add https://github.com/LoniQin/Crypto.
 ## Symmetry Cipher
 ### Implement a Symmetric Cipher
 
