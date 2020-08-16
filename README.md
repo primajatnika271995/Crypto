@@ -492,6 +492,18 @@ do {
 }
 ```
 
+Or
+```swift
+let plainText = "I am fine"
+let key = "11111111111111111111"
+do {
+    print(try plainText.process(.hmacmd5(key: key)))
+    print(try plainText.process(.hmacsha256(key: key)))
+} catch let error {
+    print(error)
+}
+```
+
 ### Supported Algorithms
 * MD5
 * SHA1
