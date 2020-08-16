@@ -81,9 +81,7 @@ public struct SymmetricCipher {
     
     public let mode: Mode
     
-    public init(_ algorithm: Algorithm, key: Data, iv: Data = Data(), padding: Padding = .pkcs7, mode: Mode = .cbc) throws {
-        guard algorithm.isValidKeySize(key.count) else { throw CryptoError.invalidKey }
-        if mode.needesIV() && iv.count != algorithm.blockSize { throw CryptoError.invalidIV }
+    public init(_ algorithm: Algorithm, key: Data, iv: Data = Data(), padding: Padding = .pkcs7, mode: Mode = .cbc) {
         self.algorithm = algorithm
         self.key = key
         self.iv = iv
@@ -91,8 +89,19 @@ public struct SymmetricCipher {
         self.mode = mode
     }
     
-    public var isValid: Bool {
-        return algorithm.isValid(mode: mode, padding: padding)
+    var isValid: Bool {
+        if mode.needesIV() && iv.count != algorithm.blockSize { return false }
+        if !algorithm.isValidKeySize(key.count) { return false }
+        if !algorithm.isValid(mode: mode, padding: padding) { return false }
+        return true
+    }
+    
+    public func tryValidate() throws {
+        if mode.needesIV() && iv.count != algorithm.blockSize { throw CryptoError.invalidIV }
+        guard algorithm.isValidKeySize(key.count) else { throw CryptoError.invalidKey }
+        if !algorithm.isValid(mode: mode, padding: padding) {
+            throw CryptoError.invalidModeOrPadding
+        }
     }
     
     public func encrypt(_ data:  Data) throws -> Data {
@@ -104,38 +113,20 @@ public struct SymmetricCipher {
     }
     
     public func process(_ operation: Operation, _ data: Data) throws -> Data {
+        try tryValidate()
         var cryptor: CCCryptorRef? = nil
         defer {
             CCCryptorRelease(cryptor)
         }
         var status: CCCryptorStatus = 0
-        if mode.needesIV() {
-            status = key.withUnsafeBytes { keyBytes in
-                iv.withUnsafeBytes { ivBytes in
-                    CCCryptorCreateWithMode(
-                        operation.rawValue,
-                        mode.rawValue,
-                        algorithm.rawValue,
-                        padding.rawValue,
-                        ivBytes.baseAddress,
-                        keyBytes.baseAddress,
-                        key.count,
-                        nil,
-                        0,
-                        0,
-                        CCModeOptions(kCCModeOptionCTR_BE),
-                        &cryptor
-                    )
-                }
-            }
-        } else {
-            status = key.withUnsafeBytes { keyBytes in
+        status = key.withUnsafeBytes { keyBytes in
+            iv.withUnsafeBytes { ivBytes in
                 CCCryptorCreateWithMode(
                     operation.rawValue,
                     mode.rawValue,
                     algorithm.rawValue,
                     padding.rawValue,
-                    nil,
+                    mode.needesIV() ? ivBytes.baseAddress: nil,
                     keyBytes.baseAddress,
                     key.count,
                     nil,

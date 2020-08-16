@@ -17,4 +17,6 @@ public enum CryptoError: Error {
     
     case invalidParams
     
+    case invalidModeOrPadding
+    
 }
