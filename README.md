@@ -14,8 +14,8 @@ It's very easy to integrate, you just need Swift Package Manager, which is alrea
 ```swift
 do {
     let data = try "I am fine".data(.utf8)
-    let key = try "1111111111111111".data(.utf8)
-    let iv = try "1111111111111111".data(.utf8)
+    let key = try "1111111111111111".data(.ascii)
+    let iv = try "1111111111111111".data(.ascii)
     let cipher = try SymmetryCipher(.aes, key: key, iv: iv)
     // Encrypt data
     let encrypted = try cipher.encrypt(data)
