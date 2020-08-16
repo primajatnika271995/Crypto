@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 public protocol DataConvertable {
     func toData() throws -> Data
 }

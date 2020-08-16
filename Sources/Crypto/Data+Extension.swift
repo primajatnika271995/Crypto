@@ -7,6 +7,7 @@
 //
 
 import Foundation
+
 public extension Data {
     
     init(hex: String) throws {

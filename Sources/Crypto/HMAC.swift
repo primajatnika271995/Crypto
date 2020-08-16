@@ -1,11 +1,13 @@
 //
-//  File.swift
+//  HMAC.swift
 //  
 //
 //  Created by lonnie on 2020/8/16.
 //
+
 import CommonCrypto
 import Foundation
+
 public struct HMAC  {
     
     public enum Algorithm: CCHmacAlgorithm, CaseIterable {

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 public extension String {
     
     func data(_ encoding: Crypto.Encoding) throws -> Data {

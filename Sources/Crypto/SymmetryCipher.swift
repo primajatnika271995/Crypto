@@ -5,8 +5,10 @@
 //  Created by lonnie on 2020/8/14.
 //  Copyright © 2020 lonnie. All rights reserved.
 //
+
 import CommonCrypto
 import Foundation
+
 public struct SymmetryCipher {
     
     public enum Algorithm: CCAlgorithm, CaseIterable {
