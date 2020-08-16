@@ -16,7 +16,7 @@ do {
     let data = try "I am fine".data(.utf8)
     let key = try "1111111111111111".data(.utf8)
     let iv = try "1111111111111111".data(.utf8)
-    let cipher = try SymmetryCipher(algorithm: .aes, key: key, iv: iv)
+    let cipher = try SymmetryCipher(.aes, key: key, iv: iv)
     // Encrypt data
     let encrypted = try cipher.encrypt(data)
     // Decrypt data
@@ -67,7 +67,7 @@ do {
         for mode in SymmetryCipher.Mode.allCases {
             let key = try algorithm.generateRandomKey()
             let iv = mode.needesIV() ? algorithm.generateRandomIV() : Data()
-            let cipher = try SymmetryCipher(algorithm: algorithm, key: key, iv: iv, mode: mode)
+            let cipher = try SymmetryCipher(algorithm, key: key, iv: iv, mode: mode)
             if cipher.isValid {
                 let data = plainText.data(using: .utf8)!
                 let encrypted = try cipher.process(.encrypt, data)

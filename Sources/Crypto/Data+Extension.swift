@@ -123,7 +123,7 @@ public extension Data {
             iv = Data()
         }
         let cipher = try SymmetryCipher(
-            algorithm: algorithm,
+            algorithm,
             key: key.toData(),
             iv: iv.toData(),
             padding: padding,

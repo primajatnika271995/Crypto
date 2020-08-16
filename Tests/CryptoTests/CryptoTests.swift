@@ -12,7 +12,7 @@ final class CryptoTests: XCTestCase {
                         for padding in SymmetryCipher.Padding.allCases {
                             let key = try algorithm.generateRandomKey()
                             let iv = mode.needesIV() ? algorithm.generateRandomIV() : Data()
-                            let cipher = try SymmetryCipher(algorithm: algorithm, key: key, iv: iv, padding: padding, mode: mode)
+                            let cipher = try SymmetryCipher(algorithm, key: key, iv: iv, padding: padding, mode: mode)
                             if algorithm.isValid(mode: mode, padding: padding) {
                                 let data = text.data(using: .utf8)!
                                 let encrypted = try cipher.process(.encrypt, data)
@@ -37,7 +37,7 @@ final class CryptoTests: XCTestCase {
                 for mode in SymmetryCipher.Mode.allCases {
                     let key = try algorithm.generateRandomKey()
                     let iv = mode.needesIV() ? algorithm.generateRandomIV() : Data()
-                    let cipher = try SymmetryCipher(algorithm: algorithm, key: key, iv: iv, mode: mode)
+                    let cipher = try SymmetryCipher(algorithm, key: key, iv: iv, mode: mode)
                     if cipher.isValid {
                         let data = plainText.data(using: .utf8)!
                         let encrypted = try cipher.process(.encrypt, data)
@@ -68,7 +68,7 @@ final class CryptoTests: XCTestCase {
                        
                         let key = try algorithm.generateRandomKey()
                         let iv = mode.needesIV() ? algorithm.generateRandomIV() : Data()
-                        let cipher = try SymmetryCipher(algorithm: algorithm, key: key, iv: iv, padding: padding, mode: mode)
+                        let cipher = try SymmetryCipher(algorithm, key: key, iv: iv, padding: padding, mode: mode)
                         if algorithm.isValid(mode: mode, padding: padding) {
                             let data = Data(random: Int(arc4random()) % 1000)
                             let encrypted = try cipher.process(.encrypt, data)
@@ -109,7 +109,7 @@ final class CryptoTests: XCTestCase {
             let data = try plainText.data(.utf8)
             let key = try String(repeating: "1", count: SymmetryCipher.Algorithm.KeySize.aes128).data(.ascii)
             let iv = try String(repeating: "1", count: algorithm.blockSize).data(.ascii)
-            let aes = try SymmetryCipher(algorithm: .aes, key: key, iv: iv)
+            let aes = try SymmetryCipher(.aes, key: key, iv: iv)
             let encrypted = try aes.encrypt(data)
             print("Cipher text: \(try encrypted.string(.hex))")
             let decrypted = try aes.decrypt(encrypted)
@@ -126,7 +126,7 @@ final class CryptoTests: XCTestCase {
             let data = try plainText.data(.utf8)
             let key = try String(repeating: "1", count: SymmetryCipher.Algorithm.KeySize.aes192).data(.ascii)
             let iv = try String(repeating: "1", count: algorithm.blockSize).data(.ascii)
-            let aes = try SymmetryCipher(algorithm: .aes, key: key, iv: iv)
+            let aes = try SymmetryCipher(.aes, key: key, iv: iv)
             let encrypted = try aes.encrypt(data)
             print("Cipher text: \(try encrypted.string(.hex))")
             let decrypted = try aes.decrypt(encrypted)
@@ -142,7 +142,7 @@ final class CryptoTests: XCTestCase {
             let data = try plainText.data(.utf8)
             let key = try String(repeating: "1", count: 32).data(.ascii)
             let iv = try String(repeating: "1", count: 16).data(.ascii)
-            let aes = try SymmetryCipher(algorithm: .aes, key: key, iv: iv)
+            let aes = try SymmetryCipher(.aes, key: key, iv: iv)
             let encrypted = try aes.encrypt(data)
             print("Cipher text: \(try encrypted.string(.hex))")
             let decrypted = try aes.decrypt(encrypted)
@@ -201,7 +201,6 @@ final class CryptoTests: XCTestCase {
     
     func testStringProcessWithDigest() {
         let plainText = "I am fine"
-        let key = "1111111111111111"
         do {
             XCTAssertEqual(try plainText.process(.init(.digest(.md5))), "75dc9bbfa6b55441d6ea91dcb2e6e900")
             XCTAssertEqual(try plainText.process(.init(.digest(.sha1))), "a4b8d1d7b17bf814694770e6deec44b07ded3c98")
