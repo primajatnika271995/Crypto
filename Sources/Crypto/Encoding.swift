@@ -1,11 +1,12 @@
 //
-//  File.swift
+//  Encoding.swift
 //  
 //
 //  Created by lonnie on 2020/8/15.
 //
 
 import Foundation
+
 public enum Encoding {
     
     case utf8

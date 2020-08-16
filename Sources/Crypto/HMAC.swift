@@ -50,12 +50,14 @@ public struct HMAC  {
     }
     
     public func process(_ data: Data) -> Data {
-        var key = self.key
-        var data = data
         var context = CCHmacContext()
         var output = [UInt8](repeating: 0, count: algorithm.digestLength)
-        CCHmacInit(&context, self.algorithm.rawValue, &key, self.key.count)
-        CCHmacUpdate(&context, &data, data.count)
+        key.withUnsafeBytes {
+            CCHmacInit(&context, algorithm.rawValue, $0.baseAddress, key.count)
+        }
+        data.withUnsafeBytes {
+            CCHmacUpdate(&context, $0.baseAddress, data.count)
+        }
         CCHmacFinal(&context, &output)
         return Data(output)
     }

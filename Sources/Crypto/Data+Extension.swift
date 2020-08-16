@@ -9,7 +9,7 @@
 import Foundation
 public extension Data {
     
-    init(hex: String) {
+    init(hex: String) throws {
         self.init()
         var buffer: UInt8?
         var skip = hex.hasPrefix("0x") ? 2 : 0
@@ -19,8 +19,7 @@ public extension Data {
                 continue
             }
             guard char.value >= 48 && char.value <= 102 else {
-                removeAll()
-                return
+                throw CryptoError.codingError
             }
             let v: UInt8
             let c: UInt8 = UInt8(char.value)
@@ -32,8 +31,7 @@ public extension Data {
             case let c where c >= 97:
                 v = c - 87
             default:
-                removeAll()
-                return
+                throw CryptoError.codingError
             }
             if let b = buffer {
                 append(b << 4 | v)
