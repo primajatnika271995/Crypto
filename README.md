@@ -449,7 +449,19 @@ do {
     print(error)
 }
 ```
+### Iterate all processors
+```swift
+import Crypto
 
+do {
+    let processors = try HMAC.Algorithm.allCases.map({HMAC($0, key: try "11111111111111111111".data(.hex))})
+    for processor in processors {
+        print("Result: \(try processor.process("Hello world".data(.utf8)).string(.hex))")
+    }
+} catch let error {
+    print(error)
+}
+```
 ### Supported Algorithms
 * MD5
 * SHA1
