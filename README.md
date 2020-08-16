@@ -494,6 +494,8 @@ do {
 
 Or
 ```swift
+import Crypto
+
 let plainText = "I am fine"
 let key = "11111111111111111111"
 do {
