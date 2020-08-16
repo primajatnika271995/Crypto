@@ -79,7 +79,9 @@ let encrypted = try cipher.process(.encrypt, data)
 // Decrypt data
 let decrypted = try cipher.process(.decrypt, encrypted)
 ```
+
 You can also speciafy padding and mode, use `encrypt` and `decrypt` method:
+
 ```swift
 import Crypto
 
@@ -92,6 +94,33 @@ let cipher = try SymmetryCipher(algorithm: alghrithm, key: key, iv: iv, padding:
 let encrypted = try cipher.encrypt(data)
 // Decrypt data
 let decrypted = try cipher.decrypt(encrypted)
+```
+
+Or you can try this way:
+
+```swift
+import Crypto
+
+do {
+    let plainText = "I am fine"
+    var key = "1111111111111111"
+    let iv = "11111111"
+    // RC2
+    print(try plainText.process(.rc2(.encrypt, key: key, iv: iv)))
+    // RC4
+    print(SymmetryCipher.Algorithm.KeySize.rc4)
+    // CAST
+    print(try plainText.process(.cast(.encrypt, key: key, iv: iv)))
+    // BLOWFISH
+    print(try plainText.process(.blowfish(.encrypt, key: key, iv: iv)))
+    // Tripple DES
+    key = "111111111111111111111111"
+    print(try plainText.process(.des3(.encrypt, key: key, iv: iv)))
+    print(try plainText.process(.rc4(.encrypt, key: key, iv: iv)))
+} catch let error {
+    print(error)
+    objc_exception_throw(error)
+}
 ```
 
 ### Iterate possible combinations
