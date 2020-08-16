@@ -449,7 +449,7 @@ do {
     print(error)
 }
 ```
-### Iterate all processors
+### Iterate all algorithms
 ```swift
 import Crypto
 
