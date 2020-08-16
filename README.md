@@ -7,6 +7,8 @@ This is a iOS crypto library. It’s made to be convenient to use. It supports f
 
 For Symmetry Cipher, this library can check whether key and iv is valid, whether the algorithm is valid for certain padding and Cipher Mode.  you can iterate all possible algorithms, cipher modes and generate valid random key and iv. You can also check if certain algorithm is valid for certain mode. You can calculate AES256 with following code:
 ```swift
+import Crypto
+
 do {
     let plainText = "Hello world"
     let data = try plainText.data(.utf8)
@@ -22,6 +24,8 @@ do {
 ```
 For Digest, you can calculate `sha256` as simple as following:
 ```swift
+import Crypto
+
 do {
     let plainText = "Hello world"
     let data = try plainText.data(.utf8)
@@ -36,6 +40,8 @@ do {
 You can also use convenience method:
 
 ```swift
+import Crypto
+
 do {
     let plainText = "Hello world"
     let key = "1111111111111111"
@@ -59,6 +65,8 @@ This is an Swift Package. In Xcode, you may choose File->Swift Packages->Add Pak
 ### Implement a Symmetric Cipher
 
 ```swift
+import Crypto
+
 let alghrithm: SymmetryCipher.Algorithm = .aes
 let data = "Hello world".data(using: .utf8)!
 // Generate random key
@@ -73,6 +81,8 @@ let decrypted = try cipher.process(.decrypt, encrypted)
 ```
 You can also speciafy padding and mode, use `encrypt` and `decrypt` method:
 ```swift
+import Crypto
+
 let alghrithm: SymmetryCipher.Algorithm = .aes
 let data = "Hello world".data(using: .utf8)!
 let key = try alghrithm.generateRandomKey()
@@ -87,6 +97,8 @@ let decrypted = try cipher.decrypt(encrypted)
 ### Iterate possible combinations
 Now I iterate combinations of algorithms and modes with following code:
 ```swift
+import Crypto
+
 do {
     let plainText = "Hello world"
     print("Plain text: \(plainText)")
@@ -363,6 +375,8 @@ Cipher text: 9de4f17afe83fa720ae781
 There are some exceptions: RC4 algorithm only supports RC4 Cipher Mode, other algorithms can’t use RC4 mode. And ECB mode and CBC mode don’t support NoPadding.
 ### Check whether an algorithm supports certain mode and padding
 ```swift
+import Crypto
+
 print(SymmetryCipher.Algorithm.aes.isValid(mode: .ctr, padding: .pkcs7))
 // prints true
 print(SymmetryCipher.Algorithm.rc4.isValid(mode: .ctr, padding: .none))
@@ -370,6 +384,8 @@ print(SymmetryCipher.Algorithm.rc4.isValid(mode: .ctr, padding: .none))
 ```
 ### Check whether iv is needed
 ```swift
+import Crypto
+
 print(SymmetryCipher.Mode.cbc.needesIV())
 // prints true
 print(SymmetryCipher.Mode.ecb.needesIV())
@@ -380,6 +396,8 @@ print(SymmetryCipher.Mode.ecb.needesIV())
 
 ### How to use
 ```swift
+import Crypto
+
 do {
     let plainText = "Hello world"
     let data = try plainText.data(.utf8)
@@ -398,6 +416,8 @@ SHA256: 64ec88ca00b268e5ba1a35678a1b5316d212f4f366b2477232534a8aeca37f3c
 ### Iterate all digests
 
 ```swift
+import Crypto
+
 let plainText = "hello world"
 print("Plain text: \(plainText)")
 for digest in Digest.allCases {
@@ -432,6 +452,8 @@ sha512:309ecc489c12d6eb4cc40f50c902f2b4d0ed77ee511a7c7a9bcd3ca86d4cd86f989dd35bc
 ### How to use
 
 ```swift
+import Crypto
+
 do {
     let hmac = try HMAC(.sha256, key: "11111111111111111111".data(.hex))
     print("Result: \(try hmac.process(try "Hello world".data(.utf8)).string(.hex))")
