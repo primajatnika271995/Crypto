@@ -1,5 +1,5 @@
 //
-//  CryptoError.swift
+//  CCError.swift
 //  Crypto
 //
 //  Created by lonnie on 2020/8/14.
@@ -7,16 +7,6 @@
 //
 import CommonCrypto
 import Foundation
-
-public enum CryptoError: Error {
-    
-    case invalidIV
-    
-    case invalidKey
-    
-    case codingError
-    
-}
 
 public enum CCError: CCCryptorStatus, Error {
     
