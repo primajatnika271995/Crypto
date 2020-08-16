@@ -454,10 +454,17 @@ do {
 import Crypto
 
 do {
-    let processors = try HMAC.Algorithm.allCases.map({HMAC($0, key: try "11111111111111111111".data(.hex))})
-    for processor in processors {
-        print("Result: \(try processor.process("Hello world".data(.utf8)).string(.hex))")
+    for algorithm in HMAC.Algorithm.allCases {
+        print(try "Hello world".process(.init(.hmac(algorithm), [.key: "11111111111111111111"])))
     }
+    /*
+    927021484b9e56f8b4075b3892b69e40dbfddb82
+    872ff29d7346589d442d294b78ea6a45
+    ddd1144470baba611751cc1ee2314aaed77dad08ee54ef207f9e45a34bde428d
+    badd9044a2458d2e71f01704b313192a1a40e52a073959ec4e97dfb04892667624ac85ba687c287e7e7988457a3d7070
+    767b4a6e1e3cf0e2c857b894eeae3d0d4584ac3e6312fb8934315fa6c83c6a614244a2a3605cc9e978933d052115c260e1f75a66cde07ba7a8a11b034b1f500c
+    72a89b5586710450fb0739c96aebb4de780c2c820fe238892ee4e7e2
+    */
 } catch let error {
     print(error)
 }
