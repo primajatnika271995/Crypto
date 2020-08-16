@@ -1,102 +1,34 @@
 # Crypto
-This is a iOS crypto library. It’s made to be convenient to use. It supports following functions:
+This is a iOS crypto library. It’s made to be convenient to use and support as many crypto methods as possible. It supports following functions:
 - [x] Symmetry Cipher
 - [x] Digest
 - [x] HMAC
-- [x] Convenience methods to handle Data and String
-
-For Symmetry Cipher, this library can check whether key and iv is valid, whether the algorithm is valid for certain padding and Cipher Mode.  you can iterate all possible algorithms, cipher modes and generate valid random key and iv. You can also check if certain algorithm is valid for certain mode. You can calculate AES256 with following code:
-```swift
-import Crypto
-
-do {
-    let plainText = "Hello world"
-    let data = try plainText.data(.utf8)
-    let key = try String(repeating: "1", count: 32).data(.ascii)
-    let iv = try String(repeating: "1", count: 16).data(.ascii)
-    let aes = try SymmetryCipher(algorithm: .aes, key: key, iv: iv)
-    let encrypted = try aes.encrypt(data)
-    print("Cipher text: \(try encrypted.string(.hex))")
-    let decrypted = try aes.decrypt(encrypted)
-} catch let error {
-    print(error)
-}
-```
-For Digest, you can calculate `sha256` as simple as following:
-```swift
-import Crypto
-
-do {
-    let plainText = "Hello world"
-    let data = try plainText.data(.utf8)
-    let digest = try Digest.sha1.process(data).string(.hex)
-    print("Plain text: \(plainText)")
-    print("SHA256: \(digest)")
-} catch let error {
-    print("Error:", error)
-}
-```
-
-You can also use convenience method:
-
-```swift
-import Crypto
-
-do {
-    let plainText = "Hello world"
-    let key = "1111111111111111"
-    let iv = "1111111111111111"
-    // Caculate AES
-    print("AES: ", try plainText.process(.aesEncrypt(key: key, iv: iv)))
-    // Caculate MD5
-    print("MD5: ", try plainText.process(.md5))
-    // Caculate SHA1
-    print("SHA1: ", try plainText.process(.sha1))
-    // Caculate HMACSHA1
-    print("HMACSHA1: ", try plainText.process(.hmacsha1(key: key)))
-} catch let error {
-    print(error)
-}
-```
+- [x] Convenience methods
+- [ ] Asymmetry Cipher
 
 ## Integration
-This is an Swift Package. In Xcode, you may choose File->Swift Packages->Add Pakcage dependancies, and add https://github.com/LoniQin/iOSCrypto.
+This is an Swift Package. In Xcode, you may choose File->Swift Packages->Add Pakcage dependancies, and add https://github.com/LoniQin/Crypto.
 ## Symmetry Cipher
-### Implement a Symmetric Cipher
+### How to use
 
 ```swift
-import Crypto
-
-let alghrithm: SymmetryCipher.Algorithm = .aes
-let data = "Hello world".data(using: .utf8)!
-// Generate random key
-let key = try alghrithm.generateRandomKey()
-// Generate random IV
-let iv = alghrithm.generateRandomIV()
-let cipher = try SymmetryCipher(algorithm: alghrithm, key: key, iv: iv)
-// Encrypt data
-let encrypted = try cipher.process(.encrypt, data)
-// Decrypt data
-let decrypted = try cipher.process(.decrypt, encrypted)
+do {
+    let data = try "I am fine".data(.utf8)
+    let key = try "1111111111111111".data(.utf8)
+    let iv = try "1111111111111111".data(.utf8)
+    let cipher = try SymmetryCipher(algorithm: .aes, key: key, iv: iv)
+    // Encrypt data
+    let encrypted = try cipher.encrypt(data)
+    // Decrypt data
+    let decrypted = try cipher.decrypt(encrypted)
+    print(try encrypted.string(.base64))
+    print(try decrypted.string(.utf8))
+} catch let error {
+    print(error)
+}
 ```
 
-You can also speciafy padding and mode, use `encrypt` and `decrypt` method:
-
-```swift
-import Crypto
-
-let alghrithm: SymmetryCipher.Algorithm = .aes
-let data = "Hello world".data(using: .utf8)!
-let key = try alghrithm.generateRandomKey()
-let iv = alghrithm.generateRandomIV()
-let cipher = try SymmetryCipher(algorithm: alghrithm, key: key, iv: iv, padding: .pkcs7, mode: .cbc)
-// Encrypt data
-let encrypted = try cipher.encrypt(data)
-// Decrypt data
-let decrypted = try cipher.decrypt(encrypted)
-```
-
-Or you can try this way:
+Or:
 
 ```swift
 import Crypto
@@ -442,6 +374,19 @@ SHA256: 64ec88ca00b268e5ba1a35678a1b5316d212f4f366b2477232534a8aeca37f3c
 */
 ```
 
+Or
+
+```swift
+do {
+    let plainText = "I am fine"
+    print(try plainText.process(.md5))
+    print(try plainText.process(.sha1))
+    print(try plainText.process(.sha256))
+} catch let error {
+    print(error)
+}
+```
+
 ### Iterate all digests
 
 ```swift
@@ -491,6 +436,39 @@ do {
 }
 ```
 
+Or
+```swift
+import Crypto
+
+let plainText = "I am fine"
+let key = "11111111111111111111"
+do {
+    print(try plainText.process(.hmacmd5(key: key)))
+    print(try plainText.process(.hmacsha256(key: key)))
+} catch let error {
+    print(error)
+}
+```
+### Iterate all processors
+```swift
+import Crypto
+
+do {
+    for algorithm in HMAC.Algorithm.allCases {
+        print(try "Hello world".process(.init(.hmac(algorithm), [.key: "11111111111111111111"])))
+    }
+    /*
+    927021484b9e56f8b4075b3892b69e40dbfddb82
+    872ff29d7346589d442d294b78ea6a45
+    ddd1144470baba611751cc1ee2314aaed77dad08ee54ef207f9e45a34bde428d
+    badd9044a2458d2e71f01704b313192a1a40e52a073959ec4e97dfb04892667624ac85ba687c287e7e7988457a3d7070
+    767b4a6e1e3cf0e2c857b894eeae3d0d4584ac3e6312fb8934315fa6c83c6a614244a2a3605cc9e978933d052115c260e1f75a66cde07ba7a8a11b034b1f500c
+    72a89b5586710450fb0739c96aebb4de780c2c820fe238892ee4e7e2
+    */
+} catch let error {
+    print(error)
+}
+```
 ### Supported Algorithms
 * MD5
 * SHA1
