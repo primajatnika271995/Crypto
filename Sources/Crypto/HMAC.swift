@@ -63,4 +63,5 @@ public struct HMAC  {
         CCHmacFinal(&context, &output)
         return Data(output)
     }
+    
 }

@@ -8,18 +8,23 @@
 import Foundation
 
 public protocol DataConvertable {
+    
     func toData() throws -> Data
+    
 }
 
-
 extension Data: DataConvertable {
+    
     public func toData() throws -> Data {
         self
     }
+    
 }
 
 extension String: DataConvertable {
+    
     public func toData() throws -> Data {
         try data(.utf8)
     }
+    
 }
