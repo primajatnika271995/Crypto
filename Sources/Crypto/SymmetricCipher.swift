@@ -1,5 +1,5 @@
 //
-//  SymmetryCipher.swift
+//  SymmetricCipher.swift
 //  Crypto
 //
 //  Created by lonnie on 2020/8/14.
@@ -9,7 +9,7 @@
 import CommonCrypto
 import Foundation
 
-public struct SymmetryCipher {
+public struct SymmetricCipher {
     
     public enum Algorithm: CCAlgorithm, CaseIterable {
         
@@ -189,7 +189,7 @@ public struct SymmetryCipher {
  
 }
 
-public extension SymmetryCipher.Algorithm {
+public extension SymmetricCipher.Algorithm {
     
     struct KeySize {
         
@@ -282,7 +282,7 @@ public extension SymmetryCipher.Algorithm {
         }
     }
     
-    func isValid(mode: SymmetryCipher.Mode, padding: SymmetryCipher.Padding) -> Bool {
+    func isValid(mode: SymmetricCipher.Mode, padding: SymmetricCipher.Padding) -> Bool {
         switch self {
         case .rc4:
             return mode == .rc4

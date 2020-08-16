@@ -7,12 +7,12 @@ final class CryptoTests: XCTestCase {
         let texts = ["🐱🐱🐱", "Hello world", ""]
         do {
             for text in texts {
-                for algorithm in SymmetryCipher.Algorithm.allCases {
-                    for mode in SymmetryCipher.Mode.allCases {
-                        for padding in SymmetryCipher.Padding.allCases {
+                for algorithm in SymmetricCipher.Algorithm.allCases {
+                    for mode in SymmetricCipher.Mode.allCases {
+                        for padding in SymmetricCipher.Padding.allCases {
                             let key = try algorithm.generateRandomKey()
                             let iv = mode.needesIV() ? algorithm.generateRandomIV() : Data()
-                            let cipher = try SymmetryCipher(algorithm, key: key, iv: iv, padding: padding, mode: mode)
+                            let cipher = try SymmetricCipher(algorithm, key: key, iv: iv, padding: padding, mode: mode)
                             if algorithm.isValid(mode: mode, padding: padding) {
                                 let data = text.data(using: .utf8)!
                                 let encrypted = try cipher.process(.encrypt, data)
@@ -28,16 +28,16 @@ final class CryptoTests: XCTestCase {
         }
     }
     
-    func testSymmetryCipherWithHelloWorld() {
+    func testSymmetricCipherWithHelloWorld() {
         do {
             let plainText = "Hello world"
             print("Plain text: \(plainText)")
             print("-----------------------------------------------------")
-            for algorithm in SymmetryCipher.Algorithm.allCases {
-                for mode in SymmetryCipher.Mode.allCases {
+            for algorithm in SymmetricCipher.Algorithm.allCases {
+                for mode in SymmetricCipher.Mode.allCases {
                     let key = try algorithm.generateRandomKey()
                     let iv = mode.needesIV() ? algorithm.generateRandomIV() : Data()
-                    let cipher = try SymmetryCipher(algorithm, key: key, iv: iv, mode: mode)
+                    let cipher = try SymmetricCipher(algorithm, key: key, iv: iv, mode: mode)
                     if cipher.isValid {
                         let data = plainText.data(using: .utf8)!
                         let encrypted = try cipher.process(.encrypt, data)
@@ -62,13 +62,13 @@ final class CryptoTests: XCTestCase {
     
     func testInRandom() throws {
         do {
-            for algorithm in SymmetryCipher.Algorithm.allCases {
-                for mode in SymmetryCipher.Mode.allCases {
-                    for padding in SymmetryCipher.Padding.allCases {
+            for algorithm in SymmetricCipher.Algorithm.allCases {
+                for mode in SymmetricCipher.Mode.allCases {
+                    for padding in SymmetricCipher.Padding.allCases {
                        
                         let key = try algorithm.generateRandomKey()
                         let iv = mode.needesIV() ? algorithm.generateRandomIV() : Data()
-                        let cipher = try SymmetryCipher(algorithm, key: key, iv: iv, padding: padding, mode: mode)
+                        let cipher = try SymmetricCipher(algorithm, key: key, iv: iv, padding: padding, mode: mode)
                         if algorithm.isValid(mode: mode, padding: padding) {
                             let data = Data(random: Int(arc4random()) % 1000)
                             let encrypted = try cipher.process(.encrypt, data)
@@ -84,12 +84,12 @@ final class CryptoTests: XCTestCase {
     }
 
     func testIsAlgorithmVaild() throws {
-        XCTAssertTrue(SymmetryCipher.Algorithm.aes.isValid(mode: .ctr, padding: .pkcs7))
+        XCTAssertTrue(SymmetricCipher.Algorithm.aes.isValid(mode: .ctr, padding: .pkcs7))
     }
     
     func testIsIVNeeded() {
-        print(SymmetryCipher.Mode.cbc.needesIV())
-        print(SymmetryCipher.Mode.ecb.needesIV())
+        print(SymmetricCipher.Mode.cbc.needesIV())
+        print(SymmetricCipher.Mode.ecb.needesIV())
     }
     
     func testDigests() {
@@ -104,12 +104,12 @@ final class CryptoTests: XCTestCase {
     
     func testAES128() {
         do {
-            let algorithm = SymmetryCipher.Algorithm.aes
+            let algorithm = SymmetricCipher.Algorithm.aes
             let plainText = "Hello world"
             let data = try plainText.data(.utf8)
-            let key = try String(repeating: "1", count: SymmetryCipher.Algorithm.KeySize.aes128).data(.ascii)
+            let key = try String(repeating: "1", count: SymmetricCipher.Algorithm.KeySize.aes128).data(.ascii)
             let iv = try String(repeating: "1", count: algorithm.blockSize).data(.ascii)
-            let aes = try SymmetryCipher(.aes, key: key, iv: iv)
+            let aes = try SymmetricCipher(.aes, key: key, iv: iv)
             let encrypted = try aes.encrypt(data)
             print("Cipher text: \(try encrypted.string(.hex))")
             let decrypted = try aes.decrypt(encrypted)
@@ -121,12 +121,12 @@ final class CryptoTests: XCTestCase {
     
     func testAES192() {
         do {
-            let algorithm = SymmetryCipher.Algorithm.aes
+            let algorithm = SymmetricCipher.Algorithm.aes
             let plainText = "Hello world"
             let data = try plainText.data(.utf8)
-            let key = try String(repeating: "1", count: SymmetryCipher.Algorithm.KeySize.aes192).data(.ascii)
+            let key = try String(repeating: "1", count: SymmetricCipher.Algorithm.KeySize.aes192).data(.ascii)
             let iv = try String(repeating: "1", count: algorithm.blockSize).data(.ascii)
-            let aes = try SymmetryCipher(.aes, key: key, iv: iv)
+            let aes = try SymmetricCipher(.aes, key: key, iv: iv)
             let encrypted = try aes.encrypt(data)
             print("Cipher text: \(try encrypted.string(.hex))")
             let decrypted = try aes.decrypt(encrypted)
@@ -142,7 +142,7 @@ final class CryptoTests: XCTestCase {
             let data = try plainText.data(.utf8)
             let key = try String(repeating: "1", count: 32).data(.ascii)
             let iv = try String(repeating: "1", count: 16).data(.ascii)
-            let aes = try SymmetryCipher(.aes, key: key, iv: iv)
+            let aes = try SymmetricCipher(.aes, key: key, iv: iv)
             let encrypted = try aes.encrypt(data)
             print("Cipher text: \(try encrypted.string(.hex))")
             let decrypted = try aes.decrypt(encrypted)

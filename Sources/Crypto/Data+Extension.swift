@@ -114,9 +114,9 @@ public extension Data {
         }
     }
     
-    func symmetryCrypt(_ algorithm: SymmetryCipher.Algorithm, _ operation: SymmetryCipher.Operation, _ options: ProcessOptions) throws -> Data {
-        let mode: SymmetryCipher.Mode = options[.mode] ?? .cbc
-        let padding: SymmetryCipher.Padding = options[.padding] ?? .pkcs7
+    func symmetryCrypt(_ algorithm: SymmetricCipher.Algorithm, _ operation: SymmetricCipher.Operation, _ options: ProcessOptions) throws -> Data {
+        let mode: SymmetricCipher.Mode = options[.mode] ?? .cbc
+        let padding: SymmetricCipher.Padding = options[.padding] ?? .pkcs7
         guard let key: DataConvertable = options[.key] else { throw CryptoError.invalidKey }
         var iv: DataConvertable!
         if let theIV: DataConvertable = options[.iv] {
@@ -124,7 +124,7 @@ public extension Data {
         } else {
             iv = Data()
         }
-        let cipher = try SymmetryCipher(
+        let cipher = try SymmetricCipher(
             algorithm,
             key: key.toData(),
             iv: iv.toData(),

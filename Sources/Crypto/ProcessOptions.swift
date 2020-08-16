@@ -28,9 +28,9 @@ public struct ProcessOptions {
     
     public enum Method {
         
-        case encrypt(SymmetryCipher.Algorithm)
+        case encrypt(SymmetricCipher.Algorithm)
         
-        case decrypt(SymmetryCipher.Algorithm)
+        case decrypt(SymmetricCipher.Algorithm)
         
         case digest(Digest)
         
@@ -64,35 +64,35 @@ public struct ProcessOptions {
     
     public static let sha384 = ProcessOptions(.digest(.sha384))
     
-    public static func aes(_ operation: SymmetryCipher.Operation, key: DataConvertable, iv: DataConvertable, mode: SymmetryCipher.Mode = .cbc, padding: SymmetryCipher.Padding = .pkcs7) -> ProcessOptions {
+    public static func aes(_ operation: SymmetricCipher.Operation, key: DataConvertable, iv: DataConvertable, mode: SymmetricCipher.Mode = .cbc, padding: SymmetricCipher.Padding = .pkcs7) -> ProcessOptions {
         symmetry(.aes, operation, key: key, iv: iv, mode: mode, padding: padding)
     }
     
-    public static func des(_ operation: SymmetryCipher.Operation, key: DataConvertable, iv: DataConvertable, mode: SymmetryCipher.Mode = .cbc, padding: SymmetryCipher.Padding = .pkcs7) -> ProcessOptions {
+    public static func des(_ operation: SymmetricCipher.Operation, key: DataConvertable, iv: DataConvertable, mode: SymmetricCipher.Mode = .cbc, padding: SymmetricCipher.Padding = .pkcs7) -> ProcessOptions {
         symmetry(.des, operation, key: key, iv: iv, mode: mode, padding: padding)
     }
     
-    public static func des3(_ operation: SymmetryCipher.Operation, key: DataConvertable, iv: DataConvertable, mode: SymmetryCipher.Mode = .cbc, padding: SymmetryCipher.Padding = .pkcs7) -> ProcessOptions {
+    public static func des3(_ operation: SymmetricCipher.Operation, key: DataConvertable, iv: DataConvertable, mode: SymmetricCipher.Mode = .cbc, padding: SymmetricCipher.Padding = .pkcs7) -> ProcessOptions {
         symmetry(.des3, operation, key: key, iv: iv, mode: mode, padding: padding)
     }
     
-    public static func cast(_ operation: SymmetryCipher.Operation, key: DataConvertable, iv: DataConvertable, mode: SymmetryCipher.Mode = .cbc, padding: SymmetryCipher.Padding = .pkcs7) -> ProcessOptions {
+    public static func cast(_ operation: SymmetricCipher.Operation, key: DataConvertable, iv: DataConvertable, mode: SymmetricCipher.Mode = .cbc, padding: SymmetricCipher.Padding = .pkcs7) -> ProcessOptions {
         symmetry(.cast, operation, key: key, iv: iv, mode: mode, padding: padding)
     }
     
-    public static func rc4(_ operation: SymmetryCipher.Operation, key: DataConvertable, iv: DataConvertable, padding: SymmetryCipher.Padding = .pkcs7) -> ProcessOptions {
+    public static func rc4(_ operation: SymmetricCipher.Operation, key: DataConvertable, iv: DataConvertable, padding: SymmetricCipher.Padding = .pkcs7) -> ProcessOptions {
         symmetry(.rc4, operation, key: key, iv: iv, mode: .rc4, padding: padding)
     }
     
-    public static func rc2(_ operation: SymmetryCipher.Operation, key: DataConvertable, iv: DataConvertable, mode: SymmetryCipher.Mode = .cbc, padding: SymmetryCipher.Padding = .pkcs7) -> ProcessOptions {
+    public static func rc2(_ operation: SymmetricCipher.Operation, key: DataConvertable, iv: DataConvertable, mode: SymmetricCipher.Mode = .cbc, padding: SymmetricCipher.Padding = .pkcs7) -> ProcessOptions {
         symmetry(.rc2, operation, key: key, iv: iv, mode: mode, padding: padding)
     }
     
-    public static func blowfish(_ operation: SymmetryCipher.Operation, key: DataConvertable, iv: DataConvertable, mode: SymmetryCipher.Mode = .cbc, padding: SymmetryCipher.Padding = .pkcs7) -> ProcessOptions {
+    public static func blowfish(_ operation: SymmetricCipher.Operation, key: DataConvertable, iv: DataConvertable, mode: SymmetricCipher.Mode = .cbc, padding: SymmetricCipher.Padding = .pkcs7) -> ProcessOptions {
         symmetry(.blowfish, operation, key: key, iv: iv, mode: mode, padding: padding)
     }
  
-    public static func symmetry(_ algorithm: SymmetryCipher.Algorithm, _ operation: SymmetryCipher.Operation, key: DataConvertable, iv: DataConvertable, mode: SymmetryCipher.Mode = .cbc, padding: SymmetryCipher.Padding = .pkcs7) -> ProcessOptions {
+    public static func symmetry(_ algorithm: SymmetricCipher.Algorithm, _ operation: SymmetricCipher.Operation, key: DataConvertable, iv: DataConvertable, mode: SymmetricCipher.Mode = .cbc, padding: SymmetricCipher.Padding = .pkcs7) -> ProcessOptions {
         let parameters: [ProcessOptions.Option: Any] = [.key: key, .iv: iv, .mode: mode, .padding: padding]
         if operation == .encrypt {
             return ProcessOptions(.encrypt(algorithm), parameters)

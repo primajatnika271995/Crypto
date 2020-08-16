@@ -16,7 +16,7 @@ do {
     let data = try "I am fine".data(.utf8)
     let key = try "1111111111111111".data(.ascii)
     let iv = try "1111111111111111".data(.ascii)
-    let cipher = try SymmetryCipher(.aes, key: key, iv: iv)
+    let cipher = try SymmetricCipher(.aes, key: key, iv: iv)
     // Encrypt data
     let encrypted = try cipher.encrypt(data)
     // Decrypt data
@@ -66,11 +66,11 @@ do {
     let plainText = "Hello world"
     print("Plain text: \(plainText)")
     print("-----------------------------------------------------")
-    for algorithm in SymmetryCipher.Algorithm.allCases {
-        for mode in SymmetryCipher.Mode.allCases {
+    for algorithm in SymmetricCipher.Algorithm.allCases {
+        for mode in SymmetricCipher.Mode.allCases {
             let key = try algorithm.generateRandomKey()
             let iv = mode.needesIV() ? algorithm.generateRandomIV() : Data()
-            let cipher = try SymmetryCipher(algorithm, key: key, iv: iv, mode: mode)
+            let cipher = try SymmetricCipher(algorithm, key: key, iv: iv, mode: mode)
             if cipher.isValid {
                 let data = plainText.data(using: .utf8)!
                 let encrypted = try cipher.process(.encrypt, data)
@@ -340,9 +340,9 @@ There are some exceptions: RC4 algorithm only supports RC4 Cipher Mode, other al
 ```swift
 import Crypto
 
-print(SymmetryCipher.Algorithm.aes.isValid(mode: .ctr, padding: .pkcs7))
+print(SymmetricCipher.Algorithm.aes.isValid(mode: .ctr, padding: .pkcs7))
 // prints true
-print(SymmetryCipher.Algorithm.rc4.isValid(mode: .ctr, padding: .none))
+print(SymmetricCipher.Algorithm.rc4.isValid(mode: .ctr, padding: .none))
 // prints false
 ```
 ### Check whether iv is needed
@@ -350,9 +350,9 @@ Only ECB mode don't support iv parameter.
 ```swift
 import Crypto
 
-print(SymmetryCipher.Mode.cbc.needesIV())
+print(SymmetricCipher.Mode.cbc.needesIV())
 // prints true
-print(SymmetryCipher.Mode.ecb.needesIV())
+print(SymmetricCipher.Mode.ecb.needesIV())
 // prints false
 ```
 
