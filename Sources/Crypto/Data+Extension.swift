@@ -46,30 +46,6 @@ public extension Data {
         }
     }
     
-    init(ascii: String) throws {
-        let data = ascii.data(using: .ascii)
-        if let data = data {
-            self = data
-        } else {
-            throw CryptoError.codingError
-        }
-    }
-    
-    init(utf8: String) throws {
-        let data = utf8.data(using: .utf8)
-        if let data = data {
-            self = data
-        } else {
-            throw CryptoError.codingError
-        }
-    }
-    
-    init(random count: Int) {
-        var items = [UInt8](repeating: 0, count: count)
-        arc4random_buf(&items, items.count)
-        self.init(items)
-    }
-    
     var hex: String {
         return `lazy`.reduce("") {
             var s = String($1, radix: 16)
@@ -79,6 +55,14 @@ public extension Data {
             return $0 + s
         }
     }
+    
+    init(random count: Int) {
+        var items = [UInt8](repeating: 0, count: count)
+        arc4random_buf(&items, items.count)
+        self.init(items)
+    }
+    
+
     
     func string(_ encoding: Encoding) throws -> String {
         var value: String?
