@@ -398,7 +398,7 @@ do {
 }
 ```
 
-### Iterate all digests
+### Iterate all algorithms
 
 ```swift
 import Crypto
