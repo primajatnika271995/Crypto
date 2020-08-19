@@ -53,7 +53,6 @@ do {
     print(try plainText.process(.rc4(.encrypt, key: key, iv: iv)))
 } catch let error {
     print(error)
-    objc_exception_throw(error)
 }
 ```
 
@@ -408,7 +407,6 @@ print("Plain text: \(plainText)")
 for digest in Digest.allCases {
     let digested = digest.process(plainText.data(using: .utf8)!)
     print("\(digest):\(digested.hex)")
-    XCTAssert(digested.count == digest.length)
 }
 /*
 Plain text: hello world
