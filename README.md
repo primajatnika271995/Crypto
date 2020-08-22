@@ -8,8 +8,16 @@ This is a swift crypto library. It’s made to be convenient to use and support 
 - [ ] Asymmetric Cipher
 - [ ] Data Compression
 
-## Integration
-It's very easy to integrate, you just need Swift Package Manager, which is already installed with XCode. In Xcode, you can choose File->Swift Packages->Add Pakcage dependancies, and add https://github.com/LoniQin/Crypto.
+## Installation
+### Swift Package Manager
+
+Once you have your Swift package set up, you add this code to your Package.swift. 
+```swift
+dependencies: [
+    .package(url: "https://github.com/LoniQin/Crypto", .upToNextMajor(from: "1.0.0"))
+]
+```
+In Xcode, you can choose File->Swift Packages->Add Pakcage dependancies, and add https://github.com/LoniQin/Crypto.
 ## Symmetric Cipher
 ### How to use
 
