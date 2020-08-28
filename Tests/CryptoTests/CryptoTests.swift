@@ -11,7 +11,7 @@ final class CryptoTests: XCTestCase {
                     for mode in SymmetricCipher.Mode.allCases {
                         for padding in SymmetricCipher.Padding.allCases {
                             let key = try algorithm.generateRandomKey()
-                            let iv = mode.needesIV() ? algorithm.generateRandomIV() : Data()
+                            let iv = mode.needsIV() ? algorithm.generateRandomIV() : Data()
                             let cipher = SymmetricCipher(algorithm, key: key, iv: iv, padding: padding, mode: mode)
                             if cipher.isValid {
                                 let data = text.data(using: .utf8)!
@@ -36,7 +36,7 @@ final class CryptoTests: XCTestCase {
             for algorithm in SymmetricCipher.Algorithm.allCases {
                 for mode in SymmetricCipher.Mode.allCases {
                     let key = try algorithm.generateRandomKey()
-                    let iv = mode.needesIV() ? algorithm.generateRandomIV() : Data()
+                    let iv = mode.needsIV() ? algorithm.generateRandomIV() : Data()
                     let cipher = SymmetricCipher(algorithm, key: key, iv: iv, mode: mode)
                     if cipher.isValid {
                         let data = plainText.data(using: .utf8)!
@@ -44,7 +44,7 @@ final class CryptoTests: XCTestCase {
                         print("Algorithm: \(String(describing: algorithm).uppercased())")
                         print("Mode: \(String(describing: mode).uppercased())")
                         print("key: \(key.hex)")
-                        if mode.needesIV() {
+                        if mode.needsIV() {
                             print("iv: \(iv.hex)")
                         }
                         print("Cipher text: \(encrypted.hex)")
@@ -67,7 +67,7 @@ final class CryptoTests: XCTestCase {
                     for padding in SymmetricCipher.Padding.allCases {
                        
                         let key = try algorithm.generateRandomKey()
-                        let iv = mode.needesIV() ? algorithm.generateRandomIV() : Data()
+                        let iv = mode.needsIV() ? algorithm.generateRandomIV() : Data()
                         let cipher = SymmetricCipher(algorithm, key: key, iv: iv, padding: padding, mode: mode)
                         if algorithm.isValid(mode: mode, padding: padding) {
                             let data = Data(random: Int(arc4random()) % 1000)
@@ -88,8 +88,8 @@ final class CryptoTests: XCTestCase {
     }
     
     func testIsIVNeeded() {
-        print(SymmetricCipher.Mode.cbc.needesIV())
-        print(SymmetricCipher.Mode.ecb.needesIV())
+        print(SymmetricCipher.Mode.cbc.needsIV())
+        print(SymmetricCipher.Mode.ecb.needsIV())
     }
     
     func testDigests() {

@@ -61,7 +61,7 @@ public struct SymmetricCipher {
         
         case cfb8 = 10
         
-        func needesIV() -> Bool {
+        func needsIV() -> Bool {
             switch self {
             case .ecb:
                 return false
@@ -90,14 +90,14 @@ public struct SymmetricCipher {
     }
     
     var isValid: Bool {
-        if mode.needesIV() && iv.count != algorithm.blockSize { return false }
+        if mode.needsIV() && iv.count != algorithm.blockSize { return false }
         if !algorithm.isValidKeySize(key.count) { return false }
         if !algorithm.isValid(mode: mode, padding: padding) { return false }
         return true
     }
     
     public func tryValidate() throws {
-        if mode.needesIV() && iv.count != algorithm.blockSize { throw CryptoError.invalidIV }
+        if mode.needsIV() && iv.count != algorithm.blockSize { throw CryptoError.invalidIV }
         guard algorithm.isValidKeySize(key.count) else { throw CryptoError.invalidKey }
         if !algorithm.isValid(mode: mode, padding: padding) {
             throw CryptoError.invalidModeOrPadding
@@ -126,7 +126,7 @@ public struct SymmetricCipher {
                     mode.rawValue,
                     algorithm.rawValue,
                     padding.rawValue,
-                    mode.needesIV() ? ivBytes.baseAddress: nil,
+                    mode.needsIV() ? ivBytes.baseAddress: nil,
                     keyBytes.baseAddress,
                     key.count,
                     nil,
@@ -235,7 +235,7 @@ public extension SymmetricCipher.Algorithm {
     }
     
     func ivSize(mode: SymmetricCipher.Mode) -> Int {
-        return mode.needesIV() ? blockSize : 0
+        return mode.needsIV() ? blockSize : 0
     }
 
     func isValidKeySize(_ size: Int) -> Bool {

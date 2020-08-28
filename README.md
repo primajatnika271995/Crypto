@@ -78,7 +78,7 @@ do {
     for algorithm in SymmetricCipher.Algorithm.allCases {
         for mode in SymmetricCipher.Mode.allCases {
             let key = try algorithm.generateRandomKey()
-            let iv = mode.needesIV() ? algorithm.generateRandomIV() : Data()
+            let iv = mode.needsIV() ? algorithm.generateRandomIV() : Data()
             let cipher = SymmetricCipher(algorithm, key: key, iv: iv, mode: mode)
             if cipher.isValid {
                 let data = plainText.data(using: .utf8)!
@@ -86,7 +86,7 @@ do {
                 print("Algorithm: \(String(describing: algorithm).uppercased())")
                 print("Mode: \(String(describing: mode).uppercased())")
                 print("key: \(key.hex)")
-                if mode.needesIV() {
+                if mode.needsIV() {
                     print("iv: \(iv.hex)")
                 }
                 print("Cipher text: \(encrypted.hex)")
