@@ -4,7 +4,6 @@ This is a swift crypto library. It’s made to be convenient to use and support 
 - [x] Symmetric Cipher
 - [x] Digest
 - [x] HMAC
-- [x] Convenience methods
 - [ ] Asymmetric Cipher
 - [ ] Data Compression
 
