@@ -1,5 +1,5 @@
 # Crypto
-This is a swift crypto library. It’s made to be convenient to use and support as many crypto methods as possible
+This is a swift crypto library. It’s made to be convenient to use and support as many crypto methods as possible.
 # Featrues
 - [x] Symmetric Cipher
 - [ ] Asymmetric Cipher
@@ -20,6 +20,7 @@ In Xcode, you can choose File->Swift Packages->Add Pakcage dependancies, and add
 ### How to use
 
 ```swift
+import Crypto
 do {
     let data = try "I am fine".data(.utf8)
     let key = try "1111111111111111".data(.ascii)
@@ -40,7 +41,6 @@ Or:
 
 ```swift
 import Crypto
-
 do {
     let plainText = "I am fine"
     var key = "1111111111111111"
