@@ -1,6 +1,6 @@
 # Crypto
 This is a swift crypto library. It’s made to be convenient to use and support as many crypto methods as possible.
-# Featrues
+## Featrues
 - [x] Symmetric Cipher
 - [ ] Asymmetric Cipher
 - [x] Digest
